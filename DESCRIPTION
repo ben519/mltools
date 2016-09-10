@@ -1,0 +1,14 @@
+Package: mltools
+Type: Package
+Title: A suite of tools to help with machine learning
+Version: 0.1.0
+Author: Ben Gorman
+Maintainer: Ben Gorman <bgorman@GormAnalysis.com>
+Description: It does cool stuff
+License: MIT?
+LazyData: TRUE
+RoxygenNote: 5.0.1
+Imports:
+  data.table
+Suggests:
+  Matrix
