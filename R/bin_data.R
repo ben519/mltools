@@ -20,7 +20,7 @@ bin_data <- function(dt, col, bins, aggregate=TRUE){
   # Bins should be like c(-Inf, 0, 10, 100, Inf) to guarantee extremes are captured
 
   # Determine which columns in dt are numeric (averages will be take for each of of these columns within each bin)
-  numericCols <- colnames(dt)[sapply(dt, is.numeric)]
+  numericCols <- colnames(dt)[sapply(dt, function(x) is.numeric(x) | is.logical(x))]
 
   # Build a table in the shape of the final output
   binned <- data.table(LB.closed=head(bins, -1), RB.open=tail(bins, -1))
