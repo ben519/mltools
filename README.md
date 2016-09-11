@@ -147,16 +147,16 @@ for(col in c("Cat1", "Cat2", "Cat3")){
 ## Randomly split the training data into 2 equally sized datasets
 
 train <- train[sample(nrow(train), nrow(train))]  # randomly shuffle the data
-cvdata <- chunk(train, chunks=2)  # split data into 2 partitions
+partition_idxs <- chunk(1:nrow(train), chunks=2)  # split the indexes of train into 2 partitions
 
-cvtrain <- cvdata[[1]]
+cvtrain <- train[partition_idxs[[1]]]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
 1:     white     115 type1 type1  type4   FALSE
 2:     brown     105 type2 type6 type11   FALSE
 3:     white      95 type1 type2  type4   FALSE
 4:   _other_     115 type2 type7 type11    TRUE
 
-cvtest <- cvdata[[2]]
+cvtest <- train[partition_idxs[[2]]]
    SkinColor IQScore  Cat1  Cat2  Cat3 IsAlien
 1:     white     250 type4 type5 type2    TRUE
 2:     green     130 type1 type2 type4    TRUE

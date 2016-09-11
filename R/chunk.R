@@ -2,6 +2,6 @@
 #'
 #' @export
 
-chunk <- function(dt, chunks){
-  split(dt, cut(seq_len(nrow(dt)), chunks, labels = FALSE))
+chunk <- function(x, chunks){
+  split(x, cut(seq_along(x), chunks, labels = FALSE))
 }
