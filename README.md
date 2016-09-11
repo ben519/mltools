@@ -10,6 +10,16 @@ The goal of this package is multifold:
 - Identify structure and patterns in a dataset
 - Evaluating the results of a machine-learning model
 
+Installation
+------
+
+```r
+install.packages("devtools")
+
+library(devtools)
+install_github("ben519/mltools")
+```
+
 Demonstration
 ------
 
