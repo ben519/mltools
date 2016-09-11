@@ -56,30 +56,28 @@ test
 ```
 
 ### Questions about the data:
-1. Are there any pairs of categorical fields (field1, field2) which are highly/perfectly correlated?
-2. Are there any parent-child related categorical fields?
+- Are there any pairs of categorical fields (field1, field2) which are highly/perfectly correlated?
+- Are there any parent-child related categorical fields?
+- How does the target variable change with IQScore?
+- What's the cardinality and skewness of each feature?
 
 ```r
 # Combine the train (excluding IsAlien) and test
 fulldataset <- rbind(train[, !"IsAlien", with=FALSE], test, fill=TRUE)
 
-# Check weighted conditional gini impurities
-gini_impurities(fulldataset, wide=TRUE)
+## Check for correlated and hierarchical fields
+gini_impurities(fulldataset, wide=TRUE)  # get weighted conditional gini impurities
 # (Cat1, Cat3) = (Cat3, Cat1) = 0 => Cat1 and Cat3 perfectly correspond to each other
 # (Cat1, Cat2) = 0.36 and (Cat2, Cat1) = 0 => Cat1-Cat2 exhibit a parent-child relationship. You can guess Cat1 by knowing Cat2, but not vice-versa.
-```
 
-3. How does the target variable change with IQScore?
-```r
+## Check relationship between numeric field and target variable
 bin_data(train, col="IQScore", bins=seq(0, 300, by=100))
          Bin LB.closed RB.open N IQScore.mean IsAlien.mean
 1:   [0,100)         0     100 2        90.00          0.0
 2: [100,200)       100     200 4       116.25          0.5
 3: [200,300)       200     300 1       250.00          1.0
-```
 
-4. What's the cardinality and skewness of each feature?
-```r
+## Check skewness of fields
 skewness(fulldataset)
 $SkinColor
    SkinColor Count       Pcnt
@@ -99,9 +97,9 @@ $Cat1
 ```
 
 ### Preparing for ML model
-1. Cateogrical fields in train and test should be factors with the same levels
-2. Split the training dataset to do cross validation
-3. Convert datasets to sparses matrices
+- Cateogrical fields in train and test should be factors with the same levels
+- Split the training dataset to do cross validation
+- Convert datasets to sparses matrices
 
 ```r
 set.seed(711)
@@ -158,8 +156,8 @@ cvtest.sparse <- sparsify(cvtest)
 ```
 
 ### Evaluate model
-1. What was the model's AUC ROC score?
-2. How well did the model do on each sample?
+- What was the model's AUC ROC score?
+- How well did the model do on each sample?
 
 ```r
 # Naive model
