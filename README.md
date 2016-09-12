@@ -79,7 +79,7 @@ fulldataset <- rbind(train[, !"IsAlien", with=FALSE], test, fill=TRUE)
 #--------------------------------------------------
 ## Check for correlated and hierarchical fields
 
-gini_impurities(fulldataset, wide=TRUE)  # get weighted conditional gini impurities
+gini_impurities(fulldataset, wide=TRUE)  #  weighted conditional gini impurities
         Var1      Cat1      Cat2      Cat3 SkinColor
 1:      Cat1 0.0000000 0.3589744 0.0000000 0.4743590
 2:      Cat2 0.0000000 0.0000000 0.0000000 0.3461538
@@ -87,10 +87,11 @@ gini_impurities(fulldataset, wide=TRUE)  # get weighted conditional gini impurit
 4: SkinColor 0.4102564 0.5384615 0.4102564 0.0000000
 
 # (Cat1, Cat3) = (Cat3, Cat1) = 0 => Cat1 and Cat3 perfectly correspond to each other
-# (Cat1, Cat2) = 0.36 and (Cat2, Cat1) = 0 => Cat1-Cat2 exhibit a parent-child relationship. You can guess Cat1 by knowing Cat2, but not vice-versa.
+# (Cat1, Cat2) > 0 and (Cat2, Cat1) = 0 => Cat1-Cat2 exhibit a parent-child relationship.
+# You can guess Cat1 by knowing Cat2, but not vice-versa.
 
 #--------------------------------------------------
-## Check relationship between numeric field and target variable
+## Check relationship between IQScore and IsAlien by binning IQScore into groups
 
 bin_data(train, col="IQScore", bins=seq(0, 300, by=100))
          Bin LB.closed RB.open N IQScore.mean IsAlien.mean
@@ -148,7 +149,7 @@ for(col in c("Cat1", "Cat2", "Cat3")){
 ## Randomly split the training data into 2 equally sized datasets
 
 train <- train[sample(nrow(train), nrow(train))]  # randomly shuffle the data
-partition_idxs <- chunk(1:nrow(train), chunks=2)  # split the indexes of train into 2 partitions
+partition_idxs <- chunk(1:nrow(train), chunks=2)  # split the indices of train into two partitions
 
 cvtrain <- train[partition_idxs[[1]]]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
@@ -170,7 +171,7 @@ cvtest <- train[partition_idxs[[2]]]
 
 cvtrain.sparse <- sparsify(cvtrain)
 4 x 6 sparse Matrix of class "dgCMatrix"
-     SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1
+     SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1 ...
 [1,]                 .               1               .               .     105          .
 [2,]                 .               .               .               1     115          1
 [3,]                 .               .               .               1      95          1
@@ -178,7 +179,7 @@ cvtrain.sparse <- sparsify(cvtrain)
 
 cvtest.sparse <- sparsify(cvtest)
 4 x 6 sparse Matrix of class "dgCMatrix"
-     SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1
+     SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1 ...
 [1,]                 .               .               .               1      85          .
 [2,]                 .               .               1               .     300          1
 [3,]                 .               .               1               .     130          1
@@ -187,7 +188,7 @@ cvtest.sparse <- sparsify(cvtest)
 
 ### Evaluate model
 - What was the model's AUC ROC score?
-- How well did the model do on each sample?
+- How good was the model's predictions for each sample?
 
 ```r
 #--------------------------------------------------
@@ -200,6 +201,7 @@ cvtest[, Prediction := ifelse(IQScore > 130, TRUE, FALSE)]
 
 # Area Under the ROC Curve (AUC ROC)
 auc_roc(preds=cvtest$Prediction, actuals=cvtest$IsAlien)
+0.67
 
 # Individual scores to determine which predictions were good/bad (see help(roc_scores) for details)
 cvtest[, ROCScore := roc_scores(preds=Prediction, actuals=IsAlien)]
