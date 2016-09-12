@@ -27,6 +27,7 @@ Predict whether or not someone is an alien
 
 ```r
 library(data.table)
+library(Matrix)  # To generate sparse matrices
 
 train <- data.table(
   SkinColor=c("green", "white", "brown", "white", "blue", "white", "green", "white"),
@@ -151,37 +152,37 @@ partition_idxs <- chunk(1:nrow(train), chunks=2)  # split the indexes of train i
 
 cvtrain <- train[partition_idxs[[1]]]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
-1:     white     115 type1 type1  type4   FALSE
-2:     brown     105 type2 type6 type11   FALSE
+1:     brown     105 type2 type6 type11   FALSE
+2:     white     115 type1 type1  type4   FALSE
 3:     white      95 type1 type2  type4   FALSE
-4:   _other_     115 type2 type7 type11    TRUE
+4:     white     250 type4 type5  type2    TRUE
 
 cvtest <- train[partition_idxs[[2]]]
-   SkinColor IQScore  Cat1  Cat2  Cat3 IsAlien
-1:     white     250 type4 type5 type2    TRUE
-2:     green     130 type1 type2 type4    TRUE
-3:     green     300 type1 type1 type4    TRUE
-4:     white      85 type4 type5 type2   FALSE
+   SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
+1:     white      85 type4 type5  type2   FALSE
+2:     green     300 type1 type1  type4    TRUE
+3:     green     130 type1 type2  type4    TRUE
+4:   _other_     115 type2 type7 type11    TRUE
 
 #--------------------------------------------------
 ## Convert cvtrain and cvtest to sparse matrices
 ## Note that unordered factors are one-hot-encoded
 
 cvtrain.sparse <- sparsify(cvtrain)
-4 x 21 sparse Matrix of class "dgCMatrix"
+4 x 6 sparse Matrix of class "dgCMatrix"
      SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1
-[1,]                 .               .               .               1     115          1
-[2,]                 .               1               .               .     105          .
+[1,]                 .               1               .               .     105          .
+[2,]                 .               .               .               1     115          1
 [3,]                 .               .               .               1      95          1
-[4,]                 1               .               .               .     115          .
+[4,]                 .               .               .               1     250          .
 
 cvtest.sparse <- sparsify(cvtest)
-4 x 21 sparse Matrix of class "dgCMatrix"
+4 x 6 sparse Matrix of class "dgCMatrix"
      SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1
-[1,]                 1               .               .               .     115          .
-[2,]                 .               .               .               1      85          .
+[1,]                 .               .               .               1      85          .
+[2,]                 .               .               1               .     300          1
 [3,]                 .               .               1               .     130          1
-[4,]                 .               .               .               1     115          1
+[4,]                 1               .               .               .     115          .
 ```
 
 ### Evaluate model
@@ -197,15 +198,15 @@ cvtest[, Prediction := ifelse(IQScore > 130, TRUE, FALSE)]
 #--------------------------------------------------
 ## Evaluate predictions
 
-# Overall using AUC ROC
-auc_roc(preds=cvtest$Prediction, actuals=cvtest$IsAlien)  # 
+# Area Under the ROC Curve (AUC ROC)
+auc_roc(preds=cvtest$Prediction, actuals=cvtest$IsAlien)
 
-# Individual scores (see help(roc_scores) for details)
+# Individual scores to determine which predictions were good/bad (see help(roc_scores) for details)
 cvtest[, ROCScore := roc_scores(preds=Prediction, actuals=IsAlien)]
 cvtest[order(ROCScore)]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien Prediction  ROCScore
-1:     white     250 type4 type5  type2    TRUE       TRUE 0.0000000
-2:     brown     105 type2 type6 type11   FALSE      FALSE 0.0000000
-3:     green     300 type1 type1  type4    TRUE       TRUE 0.0000000
-4:   _other_     115 type2 type7 type11    TRUE      FALSE 0.5833333
+1:     white      85 type4 type5  type2   FALSE      FALSE 0.0000000
+2:     green     300 type1 type1  type4    TRUE       TRUE 0.0000000
+3:     green     130 type1 type2  type4    TRUE      FALSE 0.4166667
+4:   _other_     115 type2 type7 type11    TRUE      FALSE 0.4166667
 ```
