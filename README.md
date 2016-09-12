@@ -23,30 +23,12 @@ install_github("ben519/mltools")
 Demonstration
 ------
 
-Predict whether or not someone is an alien
+Predict whether or not someone is an alien.
 
 ```r
-library(data.table)
-library(Matrix)  # To generate sparse matrices
+library(mltools)
 
-train <- data.table(
-  SkinColor=c("green", "white", "brown", "white", "blue", "white", "green", "white"),
-  IQScore=c(300, 95, 105, 250, 115, 85, 130, 115),
-  Cat1=c("type1", "type1", "type2", "type4", "type2", "type4", "type1", "type1"),
-  Cat2=c("type1", "type2", "type6", "type5", "type7", "type5", "type2", "type1"),
-  Cat3=c("type4", "type4", "type11", "type2", "type11", "type2", "type4", "type4"),
-  IsAlien=c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, FALSE)
-)
-
-test <- data.table(
-  SkinColor=c("white", "green", "brown", "white", "red"),
-  IQScore=c(79, 100, 125, 90, 115),
-  Cat1=c("type4", "type4", "type3", "type1", "type1"),
-  Cat2=c("type5", "type5", "type9", "type8", "type2"),
-  Cat3=c("type2", "type2", "type7", "type4", "type4")
-)
-
-train
+alien.train
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
 1:     green     300 type1 type1  type4    TRUE
 2:     white      95 type1 type2  type4   FALSE
@@ -57,7 +39,7 @@ train
 7:     green     130 type1 type2  type4    TRUE
 8:     white     115 type1 type1  type4   FALSE
 
-test
+alien.test
    SkinColor IQScore  Cat1  Cat2  Cat3
 1:     white      79 type4 type5 type2
 2:     green     100 type4 type5 type2
@@ -73,13 +55,13 @@ test
 - What's the cardinality and skewness of each feature?
 
 ```r
-# Combine train (excluding IsAlien) and test
-fulldataset <- rbind(train[, !"IsAlien", with=FALSE], test, fill=TRUE)
+# Combine alien.train (excluding IsAlien) and alien.test
+alien.all <- rbind(alien.train[, !"IsAlien", with=FALSE], alien.test, fill=TRUE)
 
 #--------------------------------------------------
 ## Check for correlated and hierarchical fields
 
-gini_impurities(fulldataset, wide=TRUE)  #  weighted conditional gini impurities
+gini_impurities(alien.all, wide=TRUE)  #  weighted conditional gini impurities
         Var1      Cat1      Cat2      Cat3 SkinColor
 1:      Cat1 0.0000000 0.3589744 0.0000000 0.4743590
 2:      Cat2 0.0000000 0.0000000 0.0000000 0.3461538
@@ -93,7 +75,7 @@ gini_impurities(fulldataset, wide=TRUE)  #  weighted conditional gini impurities
 #--------------------------------------------------
 ## Check relationship between IQScore and IsAlien by binning IQScore into groups
 
-bin_data(train, col="IQScore", bins=seq(0, 300, by=100))
+bin_data(alien.train, col="IQScore", bins=seq(0, 300, by=100))
          Bin LB.closed RB.open N IQScore.mean IsAlien.mean
 1:   [0,100)         0     100 2        90.00          0.0
 2: [100,200)       100     200 4       116.25          0.5
@@ -102,7 +84,7 @@ bin_data(train, col="IQScore", bins=seq(0, 300, by=100))
 #--------------------------------------------------
 ## Check skewness of fields
 
-skewness(fulldataset)
+skewness(alien.all)
 $SkinColor
    SkinColor Count       Pcnt
 1:     white     6 0.46153846
@@ -132,33 +114,33 @@ set.seed(711)
 ## Set SkinColor as a factor, such that it has the same levels in train and test
 ## Set low frequency skin colors (1 or fewer occurences) as "_other_"
 
-skincolors <- list(train$SkinColor, test$SkinColor)
+skincolors <- list(alien.train$SkinColor, alien.test$SkinColor)
 skincolors <- set_factor(skincolors, aggregationThreshold=1)
-train[, SkinColor := skincolors[[1]] ]  # update train with the new values
-test[, SkinColor := skincolors[[2]] ]  # update test with the new values
+alien.train[, SkinColor := skincolors[[1]] ]  # update train with the new values
+alien.test[, SkinColor := skincolors[[2]] ]  # update test with the new values
 
 # Repeat the process above for other categorical fields (without setting low freq. values as "_other_")
 for(col in c("Cat1", "Cat2", "Cat3")){
-  vals <- list(train[[col]], test[[col]])
+  vals <- list(alien.train[[col]], alien.test[[col]])
   vals <- set_factor(vals)
-  set(train, j=col, value=vals[[1]])
-  set(test, j=col, value=vals[[2]])
+  set(alien.train, j=col, value=vals[[1]])
+  set(alien.test, j=col, value=vals[[2]])
 }
 
 #--------------------------------------------------
 ## Randomly split the training data into 2 equally sized datasets
 
-train <- train[sample(nrow(train), nrow(train))]  # randomly shuffle the data
-partition_idxs <- chunk(1:nrow(train), chunks=2)  # split the indices of train into two partitions
+alien.train <- alien.train[sample(nrow(train), nrow(train))]  # randomly shuffle the data
+partition_idxs <- chunk(1:nrow(alien.train), chunks=2)  # split the indices of train into two partitions
 
-cvtrain <- train[partition_idxs[[1]]]
+cvtrain <- alien.train[partition_idxs[[1]]]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
 1:     brown     105 type2 type6 type11   FALSE
 2:     white     115 type1 type1  type4   FALSE
 3:     white      95 type1 type2  type4   FALSE
 4:     white     250 type4 type5  type2    TRUE
 
-cvtest <- train[partition_idxs[[2]]]
+cvtest <- alien.train[partition_idxs[[2]]]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
 1:     white      85 type4 type5  type2   FALSE
 2:     green     300 type1 type1  type4    TRUE
@@ -168,6 +150,8 @@ cvtest <- train[partition_idxs[[2]]]
 #--------------------------------------------------
 ## Convert cvtrain and cvtest to sparse matrices
 ## Note that unordered factors are one-hot-encoded
+
+library(Matrix)
 
 cvtrain.sparse <- sparsify(cvtrain)
 4 x 6 sparse Matrix of class "dgCMatrix"
