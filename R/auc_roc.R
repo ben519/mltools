@@ -2,6 +2,12 @@
 #'
 #' @export
 #' @import data.table
+#'
+#' @examples
+#' preds <- c(.1, .3, .3, .9)
+#' actuals <- c(0, 0, 1, 1)
+#' auc_roc(preds, actuals)
+#' auc_roc(preds, actuals, returnDT=TRUE)
 
 auc_roc <- function(preds, actuals, returnDT=FALSE){
   # Calculate area under the ROC curve

@@ -4,7 +4,7 @@
 \alias{gini_impurities}
 \title{Gini Impurities}
 \usage{
-gini_impurities(dt, verbose = FALSE)
+gini_impurities(dt, wide = FALSE, verbose = FALSE)
 }
 \description{
 Gini Impurities

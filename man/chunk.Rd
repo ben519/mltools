@@ -4,7 +4,7 @@
 \alias{chunk}
 \title{Chunk}
 \usage{
-chunk(x, n)
+chunk(x, chunks)
 }
 \description{
 Chunk
