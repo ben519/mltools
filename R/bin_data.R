@@ -49,8 +49,8 @@ bin_data <- function(vals=NULL, dt=NULL, binCol=NULL, bins=10, binType="explicit
   # Get the bin values
   if(binType == "explicit"){
     if(is(bins, "data.frame")){
-      LBs <- bins[, 1]
-      RBs <- bins[, 2]
+      LBs <- bins[[1]]
+      RBs <- bins[[2]]
     }else if(length(bins) == 1){
       binVals <- seq(min(vals), max(vals), length.out=bins+1)
       LBs <- head(binVals, -1)
@@ -62,8 +62,8 @@ bin_data <- function(vals=NULL, dt=NULL, binCol=NULL, bins=10, binType="explicit
   }
   if(binType == "quantile"){
     if(is(bins, "data.frame")){
-      LBs <- quantile(vals, probs=bins[, 1])
-      RBs <- quantile(vals, probs=bins[, 2])
+      LBs <- quantile(vals, probs=bins[[1]])
+      RBs <- quantile(vals, probs=bins[[2]])
     }else if(length(bins) == 1){
       binVals <- unique(quantile(vals, probs=seq(0, 1, length.out=bins+1)))
       LBs <- head(binVals, -1)
@@ -75,7 +75,7 @@ bin_data <- function(vals=NULL, dt=NULL, binCol=NULL, bins=10, binType="explicit
   }
 
   # Build binDT
-  binDT <- data.table(LB=LBs, RB=RBs)
+  binDT <- data.table(LB=LBs, RB=RBs)[order(LB, RB)]
 
   # Set the Bin column
   if(boundaryType == "lcro]"){
