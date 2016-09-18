@@ -75,11 +75,22 @@ gini_impurities(alien.all, wide=TRUE)  #  weighted conditional gini impurities
 #--------------------------------------------------
 ## Check relationship between IQScore and IsAlien by binning IQScore into groups
 
-bin_data(alien.train, col="IQScore", bins=seq(0, 300, by=100))
-         Bin LB.closed RB.open N IQScore.mean IsAlien.mean
-1:   [0,100)         0     100 2        90.00          0.0
-2: [100,200)       100     200 4       116.25          0.5
-3: [200,300)       200     300 1       250.00          1.0
+bins <- bin_data(dt=alien.train, binCol="IQScore", bins=seq(0, 300, by=100), returnDT=TRUE)
+          Bin SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
+1:   [0, 100)     white      95 type1 type2  type4   FALSE
+2:   [0, 100)     white      85 type4 type5  type2   FALSE
+3: [100, 200)     brown     105 type2 type6 type11   FALSE
+4: [100, 200)      blue     115 type2 type7 type11    TRUE
+5: [100, 200)     green     130 type1 type2  type4    TRUE
+6: [100, 200)     white     115 type1 type1  type4   FALSE
+7: [200, 300]     green     300 type1 type1  type4    TRUE
+8: [200, 300]     white     250 type4 type5  type2    TRUE
+
+bins[, list(Samples=.N, IQScore=mean(IQScore)), keyby=Bin]
+          Bin Samples IQScore
+1:   [0, 100)       2   90.00
+2: [100, 200)       4  116.25
+3: [200, 300]       2  275.00
 
 #--------------------------------------------------
 ## Check skewness of fields
