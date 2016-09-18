@@ -81,17 +81,17 @@ bin_data <- function(vals=NULL, dt=NULL, binCol=NULL, bins=10, binType="explicit
   if(boundaryType == "lcro]"){
     binDT[, Bin := paste0("[", LB, ", ", RB, ")")]
     binDT[nrow(binDT), Bin := paste0("[", LB, ", ", RB, "]")]
-    binDT[, Bin := factor(Bin, ordered=TRUE)]
+    binDT[, Bin := factor(Bin, levels=Bin, ordered=TRUE)]
   } else if(boundaryType == "lcro)"){
     binDT[, Bin := paste0("[", LB, ", ", RB, ")")]
-    binDT[, Bin := factor(Bin, ordered=TRUE)]
+    binDT[, Bin := factor(Bin, levels=Bin, ordered=TRUE)]
   } else if(boundaryType == "[lorc"){
     binDT[, Bin := paste0("(", LB, ", ", RB, "]")]
     binDT[1, Bin := paste0("[", LB, ", ", RB, "]")]
-    binDT[, Bin := factor(Bin, ordered=TRUE)]
+    binDT[, Bin := factor(Bin, levels=Bin, ordered=TRUE)]
   } else if(boundaryType == "(lorc"){
     binDT[, Bin := paste0("(", LB, ", ", RB, "]")]
-    binDT[, Bin := factor(Bin, ordered=TRUE)]
+    binDT[, Bin := factor(Bin, levels=Bin, ordered=TRUE)]
   }
 
   #--------------------------------------------------
