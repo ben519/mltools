@@ -4,27 +4,43 @@
 \alias{bin_data}
 \title{Group data.table into bins}
 \usage{
-bin_data(dt, col, bins, aggregate = TRUE)
+bin_data(vals = NULL, dt = NULL, binCol = NULL, bins = 10,
+  binType = "explicit", boundaryType = "lcro]", returnDT = FALSE)
 }
 \arguments{
-\item{dt}{A data.table}
+\item{vals}{A vector of values}
 
-\item{col}{A a column of \code{dt}}
+\item{dt}{A data.table object}
 
-\item{bins}{A vector of binning boundaries}
+\item{binCol}{A a column of \code{dt} specifying the values to bin}
 
-\item{aggregate}{Should the data be aggregated per bin?}
-}
-\value{
-If \code{aggregate} = TRUE, returns \code{dt} grouped on \code{col} by the specified \code{bins} \cr
-taking averages for all other numeric columns. Otherwise returns \code{dt} with bin identifications per row.
+\item{bins}{One of: \cr
+- single integer specifying number of bins to generate
+- vector of numbers specifying sequential bin boundaries {(x0, x1), (x1, x2), ..., (xn-1, xn)}
+- 2-column data.frame/data.table specifiying left-bounds and right-bounds}
+
+\item{binType}{One of: \cr
+- "explicit" - generate bin values as they are given
+- "quantile" - generate bins based on quantiles (empty quantile bins will be discarded) ... needs improvement}
+
+\item{boundaryType}{One of: \cr
+- "lcro]" - bins are [left-closed, right-open) except for last bin which is (left-closed, right-closed]
+- "lcro)" - bins are [left-closed, right-open)
+- "[lorc" - bins are (left-open, right-closed] except for first bin which is [left-closed, right-closed]
+- "(lorc" - bins are (left-open, right-closed]}
+
+\item{returnDT}{If FALSE, return an ordered factor of bins corresponding to the values given, else return \cr
+a data.table object which includes all bins and values (makes a copy of \code{dt} if given)}
 }
 \description{
 Group data.table into bins
 }
 \examples{
 iris.dt <- data.table(iris)
-bin_data(dt=iris.dt, col="Sepal.Length", bins=c(4, 5, 6, 7, 8), aggregate=TRUE)
+bin_data(dt=iris.dt, binCol="Sepal.Length", bins=c(4, 5, 6, 7, 8))
+bin_data(vals=iris$Petal.Length, bins=10, returnDT=TRUE)  # 10 equally spaced bins
+bin_data(vals=c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)  # make the last bin [left-closed, right-open)
+bin_data(vals=c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)  # bin values by quantile
 
 }
 

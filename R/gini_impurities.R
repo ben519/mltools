@@ -2,8 +2,6 @@
 #'
 #' @export
 #' @import data.table
-#'
-#' @examples
 
 gini_impurities <- function(dt, wide=FALSE, verbose=FALSE){
   # Returns pairs of categorical fields (cat1, cat2, GiniImpurity) where GiniImpurity is the weighted gini impurity of
