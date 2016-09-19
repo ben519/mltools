@@ -1,8 +1,8 @@
 #' Map a vector of numeric values into bins
 #'
 #' @description
-#' Takes a vector of values and bin parameters and maps each value to an ordered factor whose levels are a set of bins like [0,1), [1,2), [2,3).\cr
-#' \cr
+#' Takes a vector of values and bin parameters and maps each value to an ordered factor whose levels are a set of bins like [0,1), [1,2), [2,3).
+#'
 #' Values may be provided as a vector or via a pair of parameters - a data.table object and the name of the column to bin.
 #'
 #' @details
@@ -17,19 +17,28 @@
 #' @param vals A vector of values
 #' @param dt A data.table object
 #' @param binCol A a column of \code{dt} specifying the values to bin
-#' @param bins One of: \cr
-#'   - single integer specifying number of bins to generate
-#'   - vector of numbers specifying sequential bin boundaries {(x0, x1), (x1, x2), ..., (xn-1, xn)}
-#'   - 2-column data.frame/data.table specifiying left-bounds and right-bounds
-#' @param binType One of: \cr
-#'   - "explicit" - generate bin values as they are given
-#'   - "quantile" - generate bins based on quantiles (empty quantile bins will be discarded) ... needs improvement
-#' @param boundaryType One of: \cr
-#'   - "lcro]" - bins are [left-closed, right-open) except for last bin which is (left-closed, right-closed]
-#'   - "lcro)" - bins are [left-closed, right-open)
-#'   - "[lorc" - bins are (left-open, right-closed] except for first bin which is [left-closed, right-closed]
-#'   - "(lorc" - bins are (left-open, right-closed]
-#' @param returnDT If FALSE, return an ordered factor of bins corresponding to the values given, else return \cr
+#' @param bins
+#' \itemize{
+##'  \item{\bold{integer}} {specifying the number of bins to generate}
+##'  \item{\bold{numeric vector}} {specifying sequential bin boundaries \{(x0, x1), (x1, x2), ..., (xn-1, xn)\}}
+##'  \item{\bold{2-column data.frame/data.table}} {each row defines a bin}
+##' }
+#'
+#' @param binType
+#' \itemize{
+##'  \item{\bold{"explicit"}} {interpret bins as they are given}
+##'  \item{\bold{"quantile"}} {interpret bins as quantiles (empty quantile bins will be discarded)}
+##' }
+#'
+#' @param boundaryType
+#' \itemize{
+##'  \item{\bold{"lcro]"}} {bins are [left-closed, right-open) except for last bin which is [left-closed, right-closed]}
+##'  \item{\bold{"lcro)"}} {bins are [left-closed, right-open)}
+##'  \item{\bold{"[lorc"}} {bins are (left-open, right-closed] except for first bin which is [left-closed, right-closed]}
+##'  \item{\bold{"(lorc"}} {bins are (left-open, right-closed]}
+##' }
+#'
+#' @param returnDT If \bold{FALSE}, return an ordered factor of bins corresponding to the values given, else return
 #' a data.table object which includes all bins and values (makes a copy of \code{dt} if given)
 #'
 #' @examples
