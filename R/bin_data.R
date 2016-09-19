@@ -1,4 +1,18 @@
-#' Group data.table into bins
+#' Map a vector of numeric values into bins
+#'
+#' @description
+#' Takes a vector of values and bin parameters and maps each value to an ordered factor whose levels are a set of bins like [0,1), [1,2), [2,3).\cr
+#' \cr
+#' Values may be provided as a vector or via a pair of parameters - a data.table object and the name of the column to bin.
+#'
+#' @details
+#' This method can return two different types of output, depending on where \code{returnDT} is \code{TRUE} or \code{FALSE}.
+#'
+#' If \code{returnDT=FALSE}, returns an ordered factor vector of bins like [1, 2), [-3,-2), ... corresponding to the values which were
+#' binned and whose levels correspond to all the generated bins. (Note that empty bins may be present as unused factor levels).
+#'
+#' If \code{returnDT=TRUE}, returns a data.table object with all values and all bins (including empty bins). If \code{dt} is provided
+#' instead of \code{vals}, a full copy of \code{dt} is created and merged with the set of generated bins.
 #'
 #' @param vals A vector of values
 #' @param dt A data.table object

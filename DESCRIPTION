@@ -1,14 +1,14 @@
 Package: mltools
 Type: Package
-Title: A suite of tools to help with machine learning
+Title: Machine Learning Tools
 Version: 0.1.0
 Author: Ben Gorman
 Maintainer: Ben Gorman <bgorman@GormAnalysis.com>
-Description: It does cool stuff
-License: MIT?
+Description: mltools is simply a collection of utility and helper methods for machine learning. It relies heavily on the data.table package, and some methods rely on the Matrix package for handling sparse data.
+License: MIT
 LazyData: TRUE
 RoxygenNote: 5.0.1
 Imports:
-  data.table
+  data.table(>= 1.9.7)
 Suggests:
   Matrix

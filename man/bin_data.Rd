@@ -2,7 +2,7 @@
 % Please edit documentation in R/bin_data.R
 \name{bin_data}
 \alias{bin_data}
-\title{Group data.table into bins}
+\title{Map a vector of numeric values into bins}
 \usage{
 bin_data(vals = NULL, dt = NULL, binCol = NULL, bins = 10,
   binType = "explicit", boundaryType = "lcro]", returnDT = FALSE)
@@ -33,7 +33,18 @@ bin_data(vals = NULL, dt = NULL, binCol = NULL, bins = 10,
 a data.table object which includes all bins and values (makes a copy of \code{dt} if given)}
 }
 \description{
-Group data.table into bins
+Takes a vector of values and bin parameters and maps each value to an ordered factor whose levels are a set of bins like [0,1), [1,2), [2,3).\cr
+\cr
+Values may be provided as a vector or via a pair of parameters - a data.table object and the name of the column to bin.
+}
+\details{
+This method can return two different types of output, depending on where \code{returnDT} is \code{TRUE} or \code{FALSE}.
+
+If \code{returnDT=FALSE}, returns an ordered factor vector of bins like [1, 2), [-3,-2), ... corresponding to the values which were
+binned and whose levels correspond to all the generated bins. (Note that empty bins may be present as unused factor levels).
+
+If \code{returnDT=TRUE}, returns a data.table object with all values and all bins (including empty bins). If \code{dt} is provided
+instead of \code{vals}, a full copy of \code{dt} is created and merged with the set of generated bins.
 }
 \examples{
 iris.dt <- data.table(iris)
