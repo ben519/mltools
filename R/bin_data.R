@@ -1,3 +1,4 @@
+#' @title
 #' Map a vector of numeric values into bins
 #'
 #' @description

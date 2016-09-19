@@ -1,4 +1,15 @@
+#' @title
 #' Area Under the ROC Curve
+#'
+#' @description
+#' Calculates Area Under the ROC Curve
+#'
+#' @details
+#' If \code{returnDT=FALSE}, returns Area Under the ROC Curve.If \code{returnDT=TRUE}, returns a data.table object with
+#' False Positive Rate and True Positive Rate for plotting the ROC curve.
+#'
+#' @references
+#' \url{https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve}
 #'
 #' @export
 #' @import data.table
