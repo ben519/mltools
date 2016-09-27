@@ -207,3 +207,6 @@ cvtest[order(ROCScore)]
 3:     green     130 type1 type2  type4    TRUE      FALSE 0.4166667
 4:   _other_     115 type2 type7 type11    TRUE      FALSE 0.4166667
 ```
+
+## Contact
+If you'd like to contact me regarding bugs, questions, or general consulting, feel free to drop me a line - bgorman519@gmail.com
