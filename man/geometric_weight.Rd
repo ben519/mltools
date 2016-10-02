@@ -4,9 +4,21 @@
 \alias{geometric_weight}
 \title{Geometric Weight}
 \usage{
-geometric_weight(n = 12, r = 1.1)
+geometric_weight(k, n, r = 1)
+}
+\arguments{
+\item{r}{}
 }
 \description{
-Geometric Weight
+Generate geometric weights
+}
+\details{
+Returns a weight based on the formula r^k/sum(r^seq_len(n)). The sequence of weights for k=1, 2, ..., n sum to 1
+}
+\examples{
+geometric_weight(1:3, n=3, r=1)
+geometric_weight(1:3, n=3, r=.5)
+geometric_weight(1:3, n=3, r=2)
+
 }
 

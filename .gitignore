@@ -1,6 +1,8 @@
+*.Rproj
 *.Rproj.user
 *.Rhistory
 *.RData
 *.Ruserdata
 *.DS_Store
 make_data.R
+.Rproj.user

@@ -6,7 +6,19 @@
 \usage{
 exponential_weight(k, base = exp(1), offset = 0, slope = 0.1)
 }
+\arguments{
+\item{slope}{}
+}
 \description{
-Exponential Weight
+Generate exponential weights
+}
+\details{
+Returns a weight based on the formula 1-base^(offset-slope*k)
+}
+\examples{
+exponential_weight(1:3, slope=.1)
+exponential_weight(1:3, slope=1)
+exponential_weight(1:3, slope=10)
+
 }
 
