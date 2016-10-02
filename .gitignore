@@ -1,6 +1,6 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-make_data.R
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
 *.DS_Store
+make_data.R
