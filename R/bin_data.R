@@ -15,8 +15,7 @@
 #' If \code{returnDT=TRUE}, returns a data.table object with all values and all bins (including empty bins). If \code{dt} is provided
 #' instead of \code{vals}, a full copy of \code{dt} is created and merged with the set of generated bins.
 #'
-#' @param vals A vector of values
-#' @param dt A data.table object
+#' @param target A vector of values or a data.table object
 #' @param binCol A a column of \code{dt} specifying the values to bin
 #' @param bins
 #' \itemize{
@@ -40,35 +39,38 @@
 ##' }
 #'
 #' @param returnDT If \bold{FALSE}, return an ordered factor of bins corresponding to the values given, else return
-#' a data.table object which includes all bins and values (makes a copy of \code{dt} if given)
+#' a data.table object which includes all bins and values (makes a copy of data.table object if given)
 #'
 #' @examples
 #' iris.dt <- data.table(iris)
-#' bin_data(dt=iris.dt, binCol="Sepal.Length", bins=c(4, 5, 6, 7, 8))
-#' bin_data(vals=iris$Petal.Length, bins=10, returnDT=TRUE)  # 10 equally spaced bins
-#' bin_data(vals=c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)  # make the last bin [left-closed, right-open)
-#' bin_data(vals=c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)  # bin values by quantile
+#' bin_data(iris.dt, binCol="Sepal.Length", bins=c(4, 5, 6, 7, 8))
+#' bin_data(iris$Petal.Length, bins=10, returnDT=TRUE)  # 10 equally spaced bins
+#' bin_data(c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)  # make the last bin [left-closed, right-open)
+#' bin_data(c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)  # bin values by quantile
 #'
 #' @export
 #' @import data.table
 
-bin_data <- function(vals=NULL, dt=NULL, binCol=NULL, bins=10, binType="explicit", boundaryType="lcro]", returnDT=FALSE){
+bin_data <- function(target=NULL, binCol=NULL, bins=10, binType="explicit", boundaryType="lcro]", returnDT=FALSE){
   # Bin a vector of values
 
   # Two call formats:
-  # Provide a vector of values (vals) to be binned or
-  # Provide a data.table (dt) object and specify the column of values to be binned (binCol)
+  # Provide a vector of values to be binned or
+  # Provide a data.table object and specify the column of values to be binned (binCol)
   # bins can be a single integer, a vector of numbers, or a 2-column data.frame/data.table specifiying LBs and RBs
   # binType is one of {"explicit", "quantile"}
   # boundaryType is one of {"lcro]", "lcro)", "[lorc", "(lorc"} (i.e. "left-closed right-open" or "left-open right-closed",
   #  where last open boundary is closed ']' or open ')' or similarly the first open boundary can be closed '[' or open '('.)
   # If returnDT is FALSE, a return an ordered factor values [LB, RB) corresponding to each element of dt,
   #  else return dt with an added Bin column and potential extra rows (i.e. empty bins)
+  
+  if(is(target, "data.table") & is.null(binCol)) stop("binCol must be given")
+  if(!is(target, "data.table") & !is.null(binCol)) stop("You specified binCol but didn't provided a data.table object")
 
   #--------------------------------------------------
   # Build binDT
 
-  if(is.null(vals)) vals <- dt[[binCol]]
+  if(is(target, "data.table")) vals <- target[[binCol]] else vals <- target
 
   # Get the bin values
   if(binType == "explicit"){
@@ -145,7 +147,7 @@ bin_data <- function(vals=NULL, dt=NULL, binCol=NULL, bins=10, binType="explicit
   } else{
     # Else return a data.table object with all bin values and potentially extra rows (empty bins)
 
-    if(is.null(dt)) baseDT <- data.table(BinVal=vals) else baseDT <- copy(dt)
+    if(is(vals, "data.table")) baseDT <- copy(dt) else baseDT <- data.table(BinVal=vals)
     baseDT[, Bin := binData$Bin]  # set the bins
     binnedData <- merge(binDT[, list(Bin)], baseDT, all=TRUE)  # full outer join with binDT
 
