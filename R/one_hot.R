@@ -2,7 +2,7 @@
 #' One Hot Encode
 #'
 #' @description
-#' One-Hot-Encode unordered factor columns of a data.table
+#' One-Hot-Encode unordered factor columns of a data.table (TODO: make it work on non-factor columns)
 #'
 #' @details
 #' One-hot-encoding converts an unordered categorical vector (i.e. a factor) to multiple binarized vectors where each binary vector of
@@ -15,7 +15,18 @@
 #'
 #' @examples
 #' library(data.table)
-#' one_hot(data.table(iris))
+#' 
+#' # test dataset
+#' foo <- data.table(
+#' ID=1:5, 
+#' Color=factor(c("green", "red", "red", "blue", "green"), levels=c("blue", "green", "red", "purple")),
+#' Shape=factor(c("square", "triangle", "square", "triangle", "cirlce"))
+#' )
+#' 
+#' one_hot(foo)
+#' one_hot(foo, dropCols=TRUE)
+#' one_hot(foo, dropCols=FALSE)
+#' one_hot(foo, dropUnusedLevels=TRUE)
 #'
 #' @export
 #' @import data.table
