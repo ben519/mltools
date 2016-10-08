@@ -17,6 +17,7 @@
 #' get_folds(iris$Species, 5L, stratified=TRUE)
 #'
 #' @export
+#' @import data.table
 
 get_folds <- function(target, folds=5L, stratified=FALSE, seed=NULL){
   # Assign each element of target to a fold
