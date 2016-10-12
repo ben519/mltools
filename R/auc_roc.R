@@ -7,6 +7,10 @@
 #' @details
 #' If \code{returnDT=FALSE}, returns Area Under the ROC Curve.If \code{returnDT=TRUE}, returns a data.table object with
 #' False Positive Rate and True Positive Rate for plotting the ROC curve.
+#' 
+#' @param preds A vector of prediction values
+#' @param actuals A vector of actuals values (numeric or ordered factor)
+#' @param returnDT If TRUE, a data.table of (FalsePositiveRate, TruePositiveRate) pairs is returned, otherwise AUC ROC score is returned 
 #'
 #' @references
 #' \url{https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve}
@@ -26,6 +30,11 @@ auc_roc <- function(preds, actuals, returnDT=FALSE){
 
   # Check if every prediction is identical and if so, return 0.5
   if(length(unique(preds)) == 1) return(0.5)
+  
+  # Convert actuals to numeric if it's an ordered factor
+  if(is(actuals, "factor")){
+    if(is.ordered(actuals) & length(levels(actuals)) == 2) actuals <- as.numeric(actuals) - 1 else stop("actuals is type factor, but is unordered. Make it an ordered factor.")
+  }
 
   dt <- data.table(Pred=preds, Actual=actuals*1L)
   setorder(dt, -Pred)
