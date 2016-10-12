@@ -16,7 +16,7 @@
 #' instead of \code{vals}, a full copy of \code{dt} is created and merged with the set of generated bins.
 #'
 #' @param target A vector of values or a data.table object
-#' @param binCol A a column of \code{dt} specifying the values to bin
+#' @param binCol A column of \code{dt} specifying the values to bin
 #' @param bins
 #' \itemize{
 ##'  \item{\bold{integer}} {specifying the number of bins to generate}
