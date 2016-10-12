@@ -95,8 +95,8 @@ bin_data <- function(target=NULL, binCol=NULL, bins=10, binType="explicit", boun
       LBs <- head(binVals, -1)
       RBs <- tail(binVals, -1)
     } else{
-      LBs <- head(unique(quantile(vals, probs=bins)), -1)
-      RBs <- tail(unique(quantile(vals, probs=bins)), -1)
+      LBs <- head(unique(quantile(vals, probs=bins, , na.rm=TRUE)), -1)
+      RBs <- tail(unique(quantile(vals, probs=bins, , na.rm=TRUE)), -1)
     }
   }
 

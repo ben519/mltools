@@ -7,7 +7,11 @@
 geometric_weight(k, n, r = 1)
 }
 \arguments{
-\item{r}{}
+\item{k}{r^k/sum(r^(1, 2, ... n))}
+
+\item{n}{r^k/sum(r^(1, 2, ... n))}
+
+\item{r}{r^k/sum(r^(1, 2, ... n))}
 }
 \description{
 Generate geometric weights

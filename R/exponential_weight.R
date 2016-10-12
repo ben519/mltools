@@ -7,10 +7,10 @@
 #' @details
 #' Returns a weight based on the formula 1-base^(offset-slope*k)
 #'
-#' @param k
-#' @param base
-#' @param offset
-#' @param slope
+#' @param k 1-base^(offset-slope*k)
+#' @param base 1-base^(offset-slope*k)
+#' @param offset 1-base^(offset-slope*k)
+#' @param slope 1-base^(offset-slope*k)
 #'
 #' @examples
 #' exponential_weight(1:3, slope=.1)

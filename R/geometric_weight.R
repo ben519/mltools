@@ -7,9 +7,9 @@
 #' @details
 #' Returns a weight based on the formula r^k/sum(r^seq_len(n)). The sequence of weights for k=1, 2, ..., n sum to 1
 #'
-#' @param k
-#' @param n
-#' @param r
+#' @param k r^k/sum(r^(1, 2, ... n))
+#' @param n r^k/sum(r^(1, 2, ... n))
+#' @param r r^k/sum(r^(1, 2, ... n))
 #'
 #' @examples
 #' geometric_weight(1:3, n=3, r=1)

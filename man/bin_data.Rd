@@ -4,13 +4,11 @@
 \alias{bin_data}
 \title{Map a vector of numeric values into bins}
 \usage{
-bin_data(vals = NULL, dt = NULL, binCol = NULL, bins = 10,
-  binType = "explicit", boundaryType = "lcro]", returnDT = FALSE)
+bin_data(target = NULL, binCol = NULL, bins = 10, binType = "explicit",
+  boundaryType = "lcro]", returnDT = FALSE)
 }
 \arguments{
-\item{vals}{A vector of values}
-
-\item{dt}{A data.table object}
+\item{target}{A vector of values or a data.table object}
 
 \item{binCol}{A a column of \code{dt} specifying the values to bin}
 
@@ -33,7 +31,7 @@ bin_data(vals = NULL, dt = NULL, binCol = NULL, bins = 10,
 }}
 
 \item{returnDT}{If \bold{FALSE}, return an ordered factor of bins corresponding to the values given, else return
-a data.table object which includes all bins and values (makes a copy of \code{dt} if given)}
+a data.table object which includes all bins and values (makes a copy of data.table object if given)}
 }
 \description{
 Takes a vector of values and bin parameters and maps each value to an ordered factor whose levels are a set of bins like [0,1), [1,2), [2,3).
@@ -51,10 +49,10 @@ instead of \code{vals}, a full copy of \code{dt} is created and merged with the 
 }
 \examples{
 iris.dt <- data.table(iris)
-bin_data(dt=iris.dt, binCol="Sepal.Length", bins=c(4, 5, 6, 7, 8))
-bin_data(vals=iris$Petal.Length, bins=10, returnDT=TRUE)  # 10 equally spaced bins
-bin_data(vals=c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)  # make the last bin [left-closed, right-open)
-bin_data(vals=c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)  # bin values by quantile
+bin_data(iris.dt, binCol="Sepal.Length", bins=c(4, 5, 6, 7, 8))
+bin_data(iris$Petal.Length, bins=10, returnDT=TRUE)  # 10 equally spaced bins
+bin_data(c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)  # make the last bin [left-closed, right-open)
+bin_data(c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)  # bin values by quantile
 
 }
 

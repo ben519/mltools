@@ -7,7 +7,13 @@
 exponential_weight(k, base = exp(1), offset = 0, slope = 0.1)
 }
 \arguments{
-\item{slope}{}
+\item{k}{1-base^(offset-slope*k)}
+
+\item{base}{1-base^(offset-slope*k)}
+
+\item{offset}{1-base^(offset-slope*k)}
+
+\item{slope}{1-base^(offset-slope*k)}
 }
 \description{
 Generate exponential weights
