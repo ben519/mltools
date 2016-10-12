@@ -88,10 +88,10 @@ bin_data <- function(target=NULL, binCol=NULL, bins=10, binType="explicit", boun
   }
   if(binType == "quantile"){
     if(is(bins, "data.frame")){
-      LBs <- quantile(vals, probs=bins[[1]])
-      RBs <- quantile(vals, probs=bins[[2]])
+      LBs <- quantile(vals, probs=bins[[1]], na.rm=TRUE)
+      RBs <- quantile(vals, probs=bins[[2]], na.rm=TRUE)
     }else if(length(bins) == 1){
-      binVals <- unique(quantile(vals, probs=seq(0, 1, length.out=bins+1)))
+      binVals <- unique(quantile(vals, probs=seq(0, 1, length.out=bins+1), na.rm=TRUE))
       LBs <- head(binVals, -1)
       RBs <- tail(binVals, -1)
     } else{
