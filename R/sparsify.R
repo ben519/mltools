@@ -65,7 +65,7 @@ sparsify <- function(bg, NAColumn=FALSE, verbose=FALSE){
           helperDT <- helperDT[!is.na(ColIdx)]
         }
 
-        sparseMList[[j]] <- sparseMatrix(i=helperDT$RowIdx, j=helperDT$ColIdx, x=1.0, dims=c(nrow(bg), length(cols)), dimnames=list(NULL, cols))
+        sparseMList[[j]] <- sparseMatrix(i=helperDT$RowIdx, j=helperDT$ColIdx, dims=c(nrow(bg), length(cols)), dimnames=list(NULL, cols))
       }
     }
 
