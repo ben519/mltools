@@ -38,6 +38,7 @@
 #'
 #' @export
 #' @import data.table
+#' @import Matrix
 #'
 #' @examples
 #' dt <- data.table(
@@ -82,6 +83,10 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   # will generate an NA column with 1 indicating either the presence of NA
   # of the presence of a value - whichever is more memory efficent. Columns
   # names are feature_NA/NotNA, e.g. "color_NA" or "color_NotNA".
+  
+  # Check inputs
+  if(! naCols %in% c("none", "identify", "efficient")) 
+    stop("Argument 'naCols' not recognized. Should be one of {\"none\", \"identify\", \"efficient\"}")
   
   # Helper method
   data_type <- function(vec){
