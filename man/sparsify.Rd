@@ -4,10 +4,12 @@
 \alias{sparsify}
 \title{Sparsify}
 \usage{
-sparsify(dt, naCols = "none", sparsifyNAs = FALSE)
+sparsify(dt, sparsifyNAs = FALSE, naCols = "none")
 }
 \arguments{
 \item{dt}{A data.table object}
+
+\item{sparsifyNAs}{Should NAs be converted to 0s and sparsified?}
 
 \item{naCols}{\itemize{
  \item{\bold{"none"}} Don't generate columns to identify NA values
@@ -17,8 +19,6 @@ sparsify(dt, naCols = "none", sparsifyNAs = FALSE)
  sparse matrix with 1s indicating either NAs or Non NAs - whichever is more memory efficient. 
  Columns will be named like "color_NA" or "color_NotNA"
 }}
-
-\item{sparsifyNAs}{Should NAs be converted to 0s and sparsified?}
 }
 \description{
 Convert a data.table object into a sparse matrix (with the same number of rows).
@@ -52,8 +52,8 @@ dt <- data.table(
   ufCol=factor(c("a", NA, "c", "b"), ordered=FALSE)
 )
 sparsify(dt)
+sparsify(dt, sparsifyNAs=TRUE)
 sparsify(dt, naCols="identify")
 sparsify(dt, naCols="efficient")
-sparsify(dt, naCols="none", sparsifyNAs=TRUE)
 }
 

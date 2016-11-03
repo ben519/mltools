@@ -25,6 +25,7 @@
 #'           If \code{sparsifyNAs} = TRUE, FALSEs and NAs will be sparsified
 #' 
 #' @param dt A data.table object
+#' @param sparsifyNAs Should NAs be converted to 0s and sparsified?
 #' @param naCols
 #' \itemize{
 ##'  \item{\bold{"none"}} Don't generate columns to identify NA values
@@ -34,7 +35,6 @@
 ##'  sparse matrix with 1s indicating either NAs or Non NAs - whichever is more memory efficient. 
 ##'  Columns will be named like "color_NA" or "color_NotNA"
 ##' }
-#' @param sparsifyNAs Should NAs be converted to 0s and sparsified?
 #'
 #' @export
 #' @import data.table
@@ -48,11 +48,11 @@
 #'   ufCol=factor(c("a", NA, "c", "b"), ordered=FALSE)
 #' )
 #' sparsify(dt)
+#' sparsify(dt, sparsifyNAs=TRUE)
 #' sparsify(dt, naCols="identify")
 #' sparsify(dt, naCols="efficient")
-#' sparsify(dt, naCols="none", sparsifyNAs=TRUE)
 
-sparsify <- function(dt, naCols="none", sparsifyNAs=FALSE){
+sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   # Convert a data.table object to a sparse matrix (class "dgCMatrix")
   # Requires the Matrix package to be loaded
   
@@ -180,17 +180,25 @@ sparsify <- function(dt, naCols="none", sparsifyNAs=FALSE){
     factor_levels[, ColIdx := .I]
     dt[, SparseRowIdx := .I] # insert SparseRowIdx
     factor_vals <- melt(dt, id.vars="SparseRowIdx", measure.vars=cols.ufactor, variable.factor=FALSE, value.name="level", na.rm = TRUE)
-    dt[, SparseRowIdx := NULL]  # remove SparseRowIdx
     factor_vals <- factor_vals[factor_levels, on=c("variable", "level"), nomatch=0]
+    factor_vals[, Val := 1L]
+    if(sparsifyNAs){
+      for(col in cols.ufactor){
+        naDT <- dt[is.na(get(col)), list(SparseRowIdx, variable=col, Val=NA_integer_)]
+        naDT <- merge(naDT, factor_levels[variable==col], all=TRUE)
+        factor_vals <- rbind(factor_vals, naDT, use.names=TRUE)
+      }
+    }
+    dt[, SparseRowIdx := NULL]  # remove SparseRowIdx
     sparse.ufactors <- sparseMatrix(
       i = factor_vals$SparseRowIdx,
       j = factor_vals$ColIdx,
-      x = rep(1L, nrow(factor_vals)),
+      x = factor_vals$Val,
       dims = c(nrow(dt), nrow(factor_levels)),
       dimnames = list(NULL, paste(factor_levels$variable, factor_levels$level, sep="_"))
     )
     matList <- c(matList, list(sparse.ufactors))
-    matcols.ufactor <- factor_levels$level; names(matcols.ufactor) <- factor_levels$variable
+    matcols.ufactor <- paste(factor_levels$variable, factor_levels$level, sep="_"); names(matcols.ufactor) <- factor_levels$variable
   }
   
   # Combine sparse matrices
