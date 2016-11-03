@@ -11,7 +11,7 @@ folds(x, nfolds = 5L, stratified = FALSE, seed = NULL)
 
 \item{nfolds}{How many folds?}
 
-\item{stratified}{If x is a vector then TRUE or FALSE indicating whether x's classes be split proportionally. If x
+\item{stratified}{If x is a vector then TRUE or FALSE indicating whether x's split the class's of x proportionally. If x
 is a data.table then \code{stratified} should be FALSE or the name of a column in x on which to perform stratification.}
 
 \item{seed}{Random number seed}

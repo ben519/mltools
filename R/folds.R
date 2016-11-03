@@ -10,7 +10,7 @@
 #' Convenient method for mapping an object into equal size folds, potentially with stratification
 #'
 #' @param x A vector of values or a data.table object
-#' @param stratified If x is a vector then TRUE or FALSE indicating whether x's classes be split proportionally. If x
+#' @param stratified If x is a vector then TRUE or FALSE indicating whether x's split the class's of x proportionally. If x
 #' is a data.table then \code{stratified} should be FALSE or the name of a column in x on which to perform stratification.
 #' @param nfolds How many folds?
 #' @param seed Random number seed
