@@ -183,7 +183,7 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
     factor_vals <- melt(dt, id.vars="SparseRowIdx", measure.vars=cols.ufactor, variable.factor=FALSE, value.name="level", na.rm = TRUE)
     factor_vals <- factor_vals[factor_levels, on=c("variable", "level"), nomatch=0]
     factor_vals[, Val := 1L]
-    if(sparsifyNAs){
+    if(!sparsifyNAs){
       for(col in cols.ufactor){
         naDT <- dt[is.na(get(col)), list(SparseRowIdx, variable=col, Val=NA_integer_)]
         naDT <- merge(naDT, factor_levels[variable==col], all=TRUE)
