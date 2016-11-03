@@ -2,11 +2,23 @@
 % Please edit documentation in R/replace_na.R
 \name{replace_na}
 \alias{replace_na}
-\title{Replace NA values}
+\title{Replace NA Values}
 \usage{
 replace_na(x, repl = "auto")
 }
+\arguments{
+\item{x}{vector of values}
+
+\item{repl}{what to substitute in place of NAs}
+}
 \description{
-Replace NA values
+Convience method for returning a copy of a vector such that NA values are substituted with a replacement value
+}
+\details{
+Returns a copy of x such that NAs get replaced with a replacement value.  Default replacement value is 0.
+}
+\examples{
+replace_na(c(1, NA, 1, 0))
+
 }
 
