@@ -15,7 +15,7 @@
 #' 
 #' @export
 
-replace_na <- function (x, repl="auto") {
+replace_na <- function(x, repl="auto") {
   # Helper method to convert NAs in a vector to 0
 
   if(as.character(repl) == "auto"){
