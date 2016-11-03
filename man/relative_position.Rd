@@ -2,11 +2,24 @@
 % Please edit documentation in R/relative_position.R
 \name{relative_position}
 \alias{relative_position}
-\title{Get relative positions}
+\title{Relative Position}
 \usage{
 relative_position(vals)
 }
+\arguments{
+\item{vals}{vector of values}
+}
 \description{
-Get relative positions
+Scale a vector of values to the range [0, 1] based on rank/position
+}
+\details{
+Values are ranked and then scaled to the range [0, 1]. Ties result in the same relative position 
+(e.g. relative_position(c(1, 2, 2, 3)) results in c(0.0 0.5 0.5 1.0)). NAs remain as NAs.
+}
+\examples{
+relative_position(1:10)
+relative_position(c(1, 2, 2, 3))
+relative_position(c(1, NA, 3, 4))
+
 }
 
