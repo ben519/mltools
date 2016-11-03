@@ -164,8 +164,10 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
     if(!sparsifyNAs){
       for(col in cols.ufactor){
         naDT <- dt[is.na(get(col)), list(SparseRowIdx, variable=col, Val=NA_integer_)]
-        naDT <- merge(naDT, factor_levels[variable==col], all=TRUE)
-        factor_vals <- rbind(factor_vals, naDT, use.names=TRUE)
+        if(nrow(naDT) > 0){
+          naDT <- merge(naDT, factor_levels[variable==col], all=TRUE)
+          factor_vals <- rbind(factor_vals, naDT, use.names=TRUE)
+        }
       }
     }
     dt[, SparseRowIdx := NULL]  # remove SparseRowIdx
