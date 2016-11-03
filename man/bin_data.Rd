@@ -10,7 +10,7 @@ bin_data(target = NULL, binCol = NULL, bins = 10, binType = "explicit",
 \arguments{
 \item{target}{A vector of values or a data.table object}
 
-\item{binCol}{A a column of \code{dt} specifying the values to bin}
+\item{binCol}{A column of \code{dt} specifying the values to bin}
 
 \item{bins}{\itemize{
  \item{\bold{integer}} {specifying the number of bins to generate}

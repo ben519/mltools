@@ -6,6 +6,13 @@
 \usage{
 auc_roc(preds, actuals, returnDT = FALSE)
 }
+\arguments{
+\item{preds}{A vector of prediction values}
+
+\item{actuals}{A vector of actuals values (numeric or ordered factor)}
+
+\item{returnDT}{If TRUE, a data.table of (FalsePositiveRate, TruePositiveRate) pairs is returned, otherwise AUC ROC score is returned}
+}
 \description{
 Calculates Area Under the ROC Curve
 }
