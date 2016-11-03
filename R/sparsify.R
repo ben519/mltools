@@ -56,33 +56,6 @@
 
 sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   # Convert a data.table object to a sparse matrix (class "dgCMatrix")
-  # Requires the Matrix package to be loaded
-  
-  # Data Type | Description & NA handling ('sparsified' means converted to . == 0)
-  #--------------------------------------------------
-  # numeric | If sparsifyNAs = FALSE, only 0s will be sparsified
-  #           If sparsifyNAs = TRUE, 0s and NAs will be sparsified
-  
-  # factor (unordered) | Each level will generate a sparsified binary column
-  #                      Column names are feature_level, e.g. {"color_red", "color_blue"}
-  
-  # factor (ordered) | Levels are converted to numeric, 1 - NLevels
-  #                    If sparsifyNAs = FALSE, NAs will remain as NAs
-  #                    If sparsifyNAs = TRUE, NAs will be sparsified
-  
-  # logical | TRUE and FALSE values will be converted to 1s and 0s
-  #           If sparsifyNAs = FALSE, only FALSEs will be sparsified
-  #           If sparsifyNAs = TRUE, FALSEs and NAs will be sparsified
-  
-  # naCols 
-  # Can be one of {"none", "identify", "efficient"}
-  # If naCols == "identify", each input column that contains an NA 
-  # will generate an NA column with 1 indicating the presence of NA
-  # and . indicating otherwise. Columns names are feature_NA, e.g. "color_NA"
-  # If naCols == "efficient", each input column that contains an NA 
-  # will generate an NA column with 1 indicating either the presence of NA
-  # of the presence of a value - whichever is more memory efficent. Columns
-  # names are feature_NA/NotNA, e.g. "color_NA" or "color_NotNA".
   
   # Check inputs
   if(! naCols %in% c("none", "identify", "efficient")) 
