@@ -15,7 +15,7 @@
 #' If \code{returnDT=TRUE}, returns a data.table object with all values and all bins (including empty bins). If \code{dt} is provided
 #' instead of \code{vals}, a full copy of \code{dt} is created and merged with the set of generated bins.
 #'
-#' @param target A vector of values or a data.table object
+#' @param x A vector of values or a data.table object
 #' @param binCol A column of \code{dt} specifying the values to bin
 #' @param bins
 #' \itemize{
@@ -51,7 +51,7 @@
 #' @export
 #' @import data.table
 
-bin_data <- function(target=NULL, binCol=NULL, bins=10, binType="explicit", boundaryType="lcro]", returnDT=FALSE){
+bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryType="lcro]", returnDT=FALSE){
   # Bin a vector of values
 
   # Two call formats:
@@ -64,13 +64,13 @@ bin_data <- function(target=NULL, binCol=NULL, bins=10, binType="explicit", boun
   # If returnDT is FALSE, a return an ordered factor values [LB, RB) corresponding to each element of dt,
   #  else return dt with an added Bin column and potential extra rows (i.e. empty bins)
   
-  if(is(target, "data.table") & is.null(binCol)) stop("binCol must be given")
-  if(!is(target, "data.table") & !is.null(binCol)) stop("You specified binCol but didn't provided a data.table object")
+  if(is(x, "data.table") & is.null(binCol)) stop("binCol must be given")
+  if(!is(x, "data.table") & !is.null(binCol)) stop("You specified binCol but didn't provided a data.table object for x")
 
   #--------------------------------------------------
   # Build binDT
 
-  if(is(target, "data.table")) vals <- target[[binCol]] else vals <- target
+  if(is(x, "data.table")) vals <- x[[binCol]] else vals <- x
 
   # Get the bin values
   if(binType == "explicit"){
@@ -95,8 +95,8 @@ bin_data <- function(target=NULL, binCol=NULL, bins=10, binType="explicit", boun
       LBs <- head(binVals, -1)
       RBs <- tail(binVals, -1)
     } else{
-      LBs <- head(unique(quantile(vals, probs=bins, , na.rm=TRUE)), -1)
-      RBs <- tail(unique(quantile(vals, probs=bins, , na.rm=TRUE)), -1)
+      LBs <- head(unique(quantile(vals, probs=bins, na.rm=TRUE)), -1)
+      RBs <- tail(unique(quantile(vals, probs=bins, na.rm=TRUE)), -1)
     }
   }
 

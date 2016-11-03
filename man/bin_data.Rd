@@ -4,11 +4,11 @@
 \alias{bin_data}
 \title{Map a vector of numeric values into bins}
 \usage{
-bin_data(target = NULL, binCol = NULL, bins = 10, binType = "explicit",
+bin_data(x = NULL, binCol = NULL, bins = 10, binType = "explicit",
   boundaryType = "lcro]", returnDT = FALSE)
 }
 \arguments{
-\item{target}{A vector of values or a data.table object}
+\item{x}{A vector of values or a data.table object}
 
 \item{binCol}{A column of \code{dt} specifying the values to bin}
 
