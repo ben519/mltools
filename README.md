@@ -26,6 +26,7 @@ Demonstration
 Predict whether or not someone is an alien.
 
 ```r
+library(data.table)
 library(mltools)
 
 alien.train
@@ -75,7 +76,7 @@ gini_impurities(alien.all, wide=TRUE)  #  weighted conditional gini impurities
 #--------------------------------------------------
 ## Check relationship between IQScore and IsAlien by binning IQScore into groups
 
-bins <- bin_data(dt=alien.train, binCol="IQScore", bins=seq(0, 300, by=100), returnDT=TRUE)
+bins <- bin_data(alien.train$IQScore, bins=seq(0, 300, by=50), returnDT=TRUE)
           Bin SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
 1:   [0, 100)     white      95 type1 type2  type4   FALSE
 2:   [0, 100)     white      85 type4 type5  type2   FALSE
@@ -86,7 +87,7 @@ bins <- bin_data(dt=alien.train, binCol="IQScore", bins=seq(0, 300, by=100), ret
 7: [200, 300]     green     300 type1 type1  type4    TRUE
 8: [200, 300]     white     250 type4 type5  type2    TRUE
 
-bins[, list(Samples=.N, IQScore=mean(IQScore)), keyby=Bin]
+bins[, list(Samples=sum(!is.na(BinVal)), IQScore=mean(BinVal)), keyby=Bin]
           Bin Samples IQScore
 1:   [0, 100)       2   90.00
 2: [100, 200)       4  116.25
@@ -141,22 +142,22 @@ for(col in c("Cat1", "Cat2", "Cat3")){
 #--------------------------------------------------
 ## Randomly split the training data into 2 equally sized datasets
 
-alien.train <- alien.train[sample(nrow(train), nrow(train))]  # randomly shuffle the data
-partition_idxs <- chunk(1:nrow(alien.train), chunks=2)  # split the indices of train into two partitions
+# Partition alien.train into two folds, stratified by IsAlien
+alien.train[, FoldID := folds(IsAlien, nfolds=2, stratified=TRUE, seed=2016)]
 
-cvtrain <- alien.train[partition_idxs[[1]]]
+cvtrain <- alien.train[FoldID==1, !"FoldID"]
+   SkinColor IQScore  Cat1  Cat2  Cat3 IsAlien
+1:     green     130 type1 type2 type4    TRUE
+2:     white      95 type1 type2 type4   FALSE
+3:     white      85 type4 type5 type2   FALSE
+4:     white     250 type4 type5 type2    TRUE
+
+cvtest <- alien.train[FoldID==2, !"FoldID"]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
 1:     brown     105 type2 type6 type11   FALSE
-2:     white     115 type1 type1  type4   FALSE
-3:     white      95 type1 type2  type4   FALSE
-4:     white     250 type4 type5  type2    TRUE
-
-cvtest <- alien.train[partition_idxs[[2]]]
-   SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
-1:     white      85 type4 type5  type2   FALSE
-2:     green     300 type1 type1  type4    TRUE
-3:     green     130 type1 type2  type4    TRUE
-4:   _other_     115 type2 type7 type11    TRUE
+2:   _other_     115 type2 type7 type11    TRUE
+3:     green     300 type1 type1  type4    TRUE
+4:     white     115 type1 type1  type4   FALSE
 
 #--------------------------------------------------
 ## Convert cvtrain and cvtest to sparse matrices
@@ -164,21 +165,21 @@ cvtest <- alien.train[partition_idxs[[2]]]
 
 library(Matrix)
 
-cvtrain.sparse <- sparsify(cvtrain)
-4 x 6 sparse Matrix of class "dgCMatrix"
+cvtrain.sparse <- sparsify(cvtrain, )
+4 x 21 sparse Matrix of class "dgCMatrix"
      SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1 ...
-[1,]                 .               1               .               .     105          .
-[2,]                 .               .               .               1     115          1
-[3,]                 .               .               .               1      95          1
+[1,]                 .               .               1               .     130          1
+[2,]                 .               .               .               1      95          1
+[3,]                 .               .               .               1      85          .
 [4,]                 .               .               .               1     250          .
 
 cvtest.sparse <- sparsify(cvtest)
-4 x 6 sparse Matrix of class "dgCMatrix"
+4 x 21 sparse Matrix of class "dgCMatrix"
      SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1 ...
-[1,]                 .               .               .               1      85          .
-[2,]                 .               .               1               .     300          1
-[3,]                 .               .               1               .     130          1
-[4,]                 1               .               .               .     115          .
+[1,]                 .               1               .               .     105          .
+[2,]                 1               .               .               .     115          .
+[3,]                 .               .               1               .     300          1
+[4,]                 .               .               .               1     115          1
 ```
 
 ### Evaluate model
