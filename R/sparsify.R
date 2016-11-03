@@ -184,7 +184,7 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
     factor_levels <- data.table(variable=character(0), level=character(0))
     for(col in cols.ufactor) factor_levels <- rbind(factor_levels, data.table(variable=col, level=levels(dt[[col]])))
     factor_levels[, ColIdx := .I]
-    dt[, SparseRowIdx := .I] # insert SparseRowIdx
+    suppressWarnings(dt[, SparseRowIdx := .I]) # insert SparseRowIdx and suppress warnings about modifying the table
     factor_vals <- melt(dt, id.vars="SparseRowIdx", measure.vars=cols.ufactor, variable.factor=FALSE, value.name="level", na.rm = TRUE)
     factor_vals <- factor_vals[factor_levels, on=c("variable", "level"), nomatch=0]
     factor_vals[, Val := 1L]
