@@ -2,7 +2,6 @@
 
 export(auc_roc)
 export(bin_data)
-export(chunk)
 export(explore_dataset)
 export(exponential_weight)
 export(folds)
