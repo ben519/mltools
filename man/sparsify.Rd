@@ -46,14 +46,15 @@ logical | TRUE and FALSE values will be converted to 1s and 0s
 \examples{
 dt <- data.table(
   intCol=c(1L, NA_integer_, 3L, 0L),
-  realCol=c(1, 2, 3, 0),
+  realCol=c(NA, 2, NA, NA),
   logCol=c(TRUE, FALSE, TRUE, FALSE),
-  ofCol=factor(c("a", "b", NA, "b"), ordered=TRUE),
+  ofCol=factor(c("a", "b", NA, "b"), levels=c("a", "b", "c"), ordered=TRUE),
   ufCol=factor(c("a", NA, "c", "b"), ordered=FALSE)
 )
+
 sparsify(dt)
 sparsify(dt, sparsifyNAs=TRUE)
-sparsify(dt, naCols="identify")
-sparsify(dt, naCols="efficient")
+sparsify(dt[, list(realCol)], naCols="identify")
+sparsify(dt[, list(realCol)], naCols="efficient")
 }
 
