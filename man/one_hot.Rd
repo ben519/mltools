@@ -4,19 +4,24 @@
 \alias{one_hot}
 \title{One Hot Encode}
 \usage{
-one_hot(dt, cols = "auto", dropCols = TRUE, dropUnusedLevels = FALSE)
+one_hot(dt, cols = "auto", sparsifyNAs = FALSE, naCols = FALSE,
+  dropCols = TRUE, dropUnusedLevels = FALSE)
 }
 \arguments{
 \item{dt}{A data.table}
 
 \item{cols}{Which column(s) should be one-hot-encoded? DEFAULT = "auto" encodes all unordered factor columns}
 
+\item{sparsifyNAs}{Should NAs be converted to 0s?}
+
+\item{naCols}{Should columns be generated to indicate the present of NAs? Will only apply to factor columns with at least one NA}
+
 \item{dropCols}{Should the resulting data.table exclude the original columns which are one-hot-encoded?}
 
 \item{dropUnusedLevels}{Should columns of all 0s be generated for unused factor levels?}
 }
 \description{
-One-Hot-Encode unordered factor columns of a data.table (TODO: make it work on non-factor columns)
+One-Hot-Encode unordered factor columns of a data.table
 }
 \details{
 One-hot-encoding converts an unordered categorical vector (i.e. a factor) to multiple binarized vectors where each binary vector of
@@ -25,17 +30,16 @@ One-hot-encoding converts an unordered categorical vector (i.e. a factor) to mul
 \examples{
 library(data.table)
 
-# test dataset
-foo <- data.table(
-ID=1:5, 
-Color=factor(c("green", "red", "red", "blue", "green"), levels=c("blue", "green", "red", "purple")),
-Shape=factor(c("square", "triangle", "square", "triangle", "cirlce"))
+dt <- data.table(
+  ID = 1:4,
+  color = factor(c("red", NA, "blue", "blue"), levels=c("blue", "green", "red"))
 )
 
-one_hot(foo)
-one_hot(foo, dropCols=TRUE)
-one_hot(foo, dropCols=FALSE)
-one_hot(foo, dropUnusedLevels=TRUE)
+one_hot(dt)
+one_hot(dt, sparsifyNAs=TRUE)
+one_hot(dt, naCols=TRUE)
+one_hot(dt, dropCols=FALSE)
+one_hot(dt, dropUnusedLevels=TRUE)
 
 }
 
