@@ -41,6 +41,9 @@
 #' @import Matrix
 #'
 #' @examples
+#' library(data.table)
+#' library(Matrix)
+#' 
 #' dt <- data.table(
 #'   intCol=c(1L, NA_integer_, 3L, 0L),
 #'   realCol=c(NA, 2, NA, NA),
@@ -197,73 +200,3 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   
   return(sparse.all)
 }
-
-#======================================================================================================
-# OLD METHOD
-
-# sparsify <- function(dt, naCols=FALSE, verbose=FALSE){
-#   # Converts a data.table to a sparse matrix (type dgCMatrix)
-#   # If naCols = TRUE, an extra binary column inidicating NAs will be created for each unordered factor which contains NA values
-#   # Need to investigate how this works when NAs are present in logical (and other?) columns
-#   # This might be improvable by converting an unordered factor column with no NAs and 2 levels to a single column instead of 2 columns
-# 
-#   sparseMList <- list()
-#   dt_cols <- colnames(dt)
-# 
-#   # Loop through the columns of dt
-#   for(j in seq_along(dt_cols)){
-#     colname <- dt_cols[j]
-#     if(verbose) print(colname)
-# 
-#     # Type logical
-#     if(is(dt[[colname]], "logical")){
-#       if(sum(is.na(dt[[colname]])) != 0) stop("Missing values deteced in logical field. Please improve dtToSparseMatrix()")
-#       sparseMList[[j]] <- Matrix(dt[[colname]]*1.0, sparse=TRUE, dimnames=list(NULL, colname))
-#     }
-# 
-#     # Type numeric
-#     if(is(dt[[colname]], "numeric")){
-#       if(sum(is.na(dt[[colname]])) != 0) stop("Missing values deteced in numeric field. Please improve dtToSparseMatrix()")
-#       sparseMList[[j]] <- Matrix(dt[[colname]]*1.0, sparse=TRUE, dimnames=list(NULL, colname))
-#     }
-# 
-#     # Type factor
-#     if(is(dt[[colname]], "factor")){
-# 
-#       # Get the row and column indices
-#       helperDT <- dt[, colname, with=FALSE]
-#       helperDT[, `:=`(RowIdx=.I, ColIdx=as.integer(get(colname)))]
-# 
-#       # ordered
-#       if(is.ordered(dt[[colname]])){
-#         helperDT <- helperDT[!is.na(ColIdx)]  # remove NAs
-#         sparseMList[[j]] <- sparseMatrix(i=helperDT$RowIdx, j=rep(1L, nrow(helperDT)), x=as.numeric(helperDT[[colname]]),
-#                                          dims=c(nrow(dt), 1), dimnames=list(NULL, colname))
-#       }
-# 
-#       # unordered
-#       else{
-# 
-#         # Handle NAs
-#         if(naCols & sum(is.na(dt[[colname]])) > 0){
-#           cols <- paste0(colname, "_", c(levels(dt[[colname]]), "NA"))
-#           helperDT[is.na(ColIdx), ColIdx := length(cols)]
-#         } else{
-#           cols <- paste0(colname, "_", levels(dt[[colname]]))
-#           helperDT <- helperDT[!is.na(ColIdx)]
-#         }
-# 
-#         sparseMList[[j]] <- sparseMatrix(i=helperDT$RowIdx, j=helperDT$ColIdx, dims=c(nrow(dt), length(cols)), dimnames=list(NULL, cols))
-#       }
-#     }
-# 
-#     # Type other
-#     if(length(intersect(c("logical", "integer", "numeric", "factor"), class(dt[[colname]]))) == 0){
-#       print(paste("Column", colname, "type not recognized as one of {logical, numeric, factor}"))
-#     }
-#   }
-# 
-#   # cbind the matrices together
-#   sparseM <- do.call(cbind, sparseMList)
-#   return(sparseM)
-# }

@@ -44,6 +44,9 @@ logical | TRUE and FALSE values will be converted to 1s and 0s
           If \code{sparsifyNAs} = TRUE, FALSEs and NAs will be sparsified
 }
 \examples{
+library(data.table)
+library(Matrix)
+
 dt <- data.table(
   intCol=c(1L, NA_integer_, 3L, 0L),
   realCol=c(NA, 2, NA, NA),
