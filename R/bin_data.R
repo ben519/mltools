@@ -42,6 +42,7 @@
 #' a data.table object which includes all bins and values (makes a copy of data.table object if given)
 #'
 #' @examples
+#' library(data.table)
 #' iris.dt <- data.table(iris)
 #' bin_data(iris.dt, binCol="Sepal.Length", bins=c(4, 5, 6, 7, 8))
 #' bin_data(iris$Petal.Length, bins=10, returnDT=TRUE)  # 10 equally spaced bins
