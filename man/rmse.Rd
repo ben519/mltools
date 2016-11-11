@@ -26,6 +26,6 @@ rmse(preds, actuals)
 
 }
 \references{
-\url{https://en.wikipedia.org/wiki/Matthews_correlation_coefficient}
+\url{https://en.wikipedia.org/wiki/Root-mean-square_deviation}
 }
 

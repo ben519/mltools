@@ -12,7 +12,7 @@
 #' @param na.rm Should NA values be ignored?
 #'
 #' @references
-#' \url{https://en.wikipedia.org/wiki/Matthews_correlation_coefficient}
+#' \url{https://en.wikipedia.org/wiki/Root-mean-square_deviation}
 #'
 #' @examples
 #' preds <- c(1.0, 2.0, 9.5)
