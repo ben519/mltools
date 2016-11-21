@@ -80,10 +80,27 @@ empirical_cdf <- function(x=NULL, ubounds){
   binned.uniques <- binned[, .N, keyby=eval(paste0("Bound.", names(ubounds)))]
   setnames(binned.uniques, paste0("Bound.", names(ubounds)), names(ubounds))
   
-  # Build result
-  on <- paste0(names(ubounds), "<=", names(ubounds))
-  result <- binned.uniques[uboundsDT, on=eval(on), allow.cartesian=TRUE][, list(N.cum = sum(N, na.rm=TRUE)), keyby=eval(names(ubounds))]
-  result[, CDF := N.cum/nrow(binned)]
+  # Get the count of samples directly below EVERY bound
+  uboundsDT <- binned.uniques[uboundsDT, on=names(ubounds)]
+  uboundsDT[is.na(N), N := 0]
   
-  return(result[])
+  # Counting (see http://stackoverflow.com/a/40583817/2146894)
+  if(length(ubounds) == 1){
+    uboundsDT[, N.cum := cumsum(N)]
+  } else{
+    fixedCols <- names(ubounds)[-1]
+    uboundsDT[, N.cum := cumsum(N), by=fixedCols]
+    
+    for(i in seq_len(length(ubounds) - 1)){
+      i = i + 1
+      fixedCols <- names(ubounds)[-i]
+      uboundsDT[, N.cum := cumsum(N.cum), by=fixedCols]
+    }
+  }
+  
+  # Cleanup
+  samples <- nrow(x)
+  uboundsDT[, `:=`(N = NULL, CDF = N.cum/samples)]
+  
+  return(uboundsDT[])
 }
