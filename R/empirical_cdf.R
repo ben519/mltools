@@ -65,6 +65,7 @@ empirical_cdf <- function(x=NULL, ubounds){
   if(length(setdiff(names(ubounds), colnames(x))) > 0) stop("ubounds doesn't correspond to the columns in x")
   
   # Build the grid of upper bounds
+  for(bound in names(ubounds)) ubounds[[bound]] <- sort(ubounds[[bound]])  # Force sorted bounds
   uboundsDT <- do.call(CJ, ubounds)
   
   # Build a copy of x
