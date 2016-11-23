@@ -20,6 +20,7 @@
 #' @importFrom methods is
 #'
 #' @examples
+#' library(data.table)
 #' preds <- c(.1, .3, .3, .9)
 #' actuals <- c(0, 0, 1, 1)
 #' auc_roc(preds, actuals)

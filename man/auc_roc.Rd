@@ -21,6 +21,7 @@ If \code{returnDT=FALSE}, returns Area Under the ROC Curve.If \code{returnDT=TRU
 False Positive Rate and True Positive Rate for plotting the ROC curve.
 }
 \examples{
+library(data.table)
 preds <- c(.1, .3, .3, .9)
 actuals <- c(0, 0, 1, 1)
 auc_roc(preds, actuals)
