@@ -2,11 +2,29 @@
 % Please edit documentation in R/explore_dataset.R
 \name{explore_dataset}
 \alias{explore_dataset}
-\title{Explore a dataset}
+\title{Explore Dataset}
 \usage{
 explore_dataset(dt1, dt2 = NULL, targetCol = NULL, verbose = FALSE)
 }
+\arguments{
+\item{dt1}{dataset to analyze}
+
+\item{dt2}{(optional) second dataset to analyze, with the same columns as dt1}
+
+\item{targetCol}{Name of the column you're trying to model/predict}
+
+\item{verbose}{Should the exploratory process steps be displayed?}
+}
 \description{
-Explore a dataset
+(Expirimental) Automated Exploratory Data Analysis
+}
+\details{
+Expirimental. Evaluates and summarizes the data in every column of a data.table. 
+Can identify columns with hierarchical structure and columns with perfectly correlated 
+values.
+}
+\examples{
+library(data.table)
+explore_dataset(alien.train)
 }
 
