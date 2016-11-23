@@ -2,11 +2,24 @@
 % Please edit documentation in R/set_factor.R
 \name{set_factor}
 \alias{set_factor}
-\title{Set factor variable}
+\title{Set Factor}
 \usage{
 set_factor(vectorList, aggregationThreshold = 0)
 }
+\arguments{
+\item{vectorList}{A list of values to convert to factors}
+
+\item{aggregationThreshold}{Values which appear this many times or less will be grouped into the level "_other_"}
+}
 \description{
-Set factor variable
+Convience method for dealing with factors. Map a list of vectors to a list of factor vectors (1-1 mapping) such that
+the factor vectors all have the same levels - the unique values of the union of all the vectors in the list. Optionally
+group all low frequency values into a "_other_" level.
+}
+\examples{
+x <- c("a", "b", "c", "c")
+y <- c("a", "d", "d")
+set_factor(list(x, y))
+set_factor(list(x, y), aggregationThreshold=1)
 }
 

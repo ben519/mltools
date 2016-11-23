@@ -1,7 +1,22 @@
-#' Set factor variable
+#' @title
+#' Set Factor
+#'
+#' @description
+#' Convience method for dealing with factors. Map a list of vectors to a list of factor vectors (1-1 mapping) such that
+#' the factor vectors all have the same levels - the unique values of the union of all the vectors in the list. Optionally
+#' group all low frequency values into a "_other_" level.
+#' 
+#' @param vectorList A list of values to convert to factors
+#' @param aggregationThreshold Values which appear this many times or less will be grouped into the level "_other_"
 #'
 #' @export
 #' @import data.table
+#'
+#' @examples
+#' x <- c("a", "b", "c", "c")
+#' y <- c("a", "d", "d")
+#' set_factor(list(x, y))
+#' set_factor(list(x, y), aggregationThreshold=1)
 
 set_factor <- function(vectorList, aggregationThreshold=0){
   # Converts each vector in vectorList to an unordered factor with levels equal to the values of their union
@@ -33,7 +48,3 @@ set_factor <- function(vectorList, aggregationThreshold=0){
   names(result) <- names(vectorList)
   return(result)
 }
-
-# vec1 <- c("a", "b", "d", NA)
-# vec2 <- c("b", "c")
-# setFactor(list(factor(vec1), vec2), 0)
