@@ -6,7 +6,17 @@
 \usage{
 skewness(dt)
 }
+\arguments{
+\item{dt}{A data.table}
+}
 \description{
-Skewness
+Calculates the skewness of each field in a data.table
+}
+\details{
+Counts the frequency of each value in each column, then displays the results in descending order
+}
+\examples{
+library(data.table)
+skewness(alien.train)
 }
 
