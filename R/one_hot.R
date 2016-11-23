@@ -38,6 +38,13 @@ one_hot <- function(dt, cols="auto", sparsifyNAs=FALSE, naCols=FALSE, dropCols=T
   # If dropCols=TRUE, the original factor columns are dropped
   # If dropUnusedLevels = TRUE, unused factor levels are dropped
   
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  OHEID <- NULL
+  
+  #--------------------------------------------------
+  
   # Automatically get the unordered factor columns
   if(cols[1] == "auto") cols <- colnames(dt)[which(sapply(dt, function(x) is.factor(x) & !is.ordered(x)))]
   

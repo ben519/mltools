@@ -44,13 +44,22 @@
 #' @examples
 #' library(data.table)
 #' iris.dt <- data.table(iris)
+#' 
+#' # custom bins
 #' bin_data(iris.dt, binCol="Sepal.Length", bins=c(4, 5, 6, 7, 8))
-#' bin_data(iris$Petal.Length, bins=10, returnDT=TRUE)  # 10 equally spaced bins
-#' bin_data(c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)  # make the last bin [left-closed, right-open)
-#' bin_data(c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)  # bin values by quantile
+#' 
+#' # 10 equally spaced bins
+#' bin_data(iris$Petal.Length, bins=10, returnDT=TRUE)
+#' 
+#' # make the last bin [left-closed, right-open)
+#' bin_data(c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)
+#' 
+#' # bin values by quantile
+#' bin_data(c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)
 #'
 #' @export
 #' @import data.table
+#' @importFrom stats quantile
 
 bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryType="lcro]", returnDT=FALSE){
   # Bin a vector of values
@@ -64,6 +73,18 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   #  where last open boundary is closed ']' or open ')' or similarly the first open boundary can be closed '[' or open '('.)
   # If returnDT is FALSE, a return an ordered factor values [LB, RB) corresponding to each element of dt,
   #  else return dt with an added Bin column and potential extra rows (i.e. empty bins)
+  
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  LB <- NULL
+  RB <- NULL
+  Bin <- NULL
+  dt <- NULL
+  BinCol <- NULL
+  i.Bin <- NULL
+  
+  #--------------------------------------------------
   
   if(is(x, "data.table") & is.null(binCol)) stop("binCol must be given")
   if(!is(x, "data.table") & !is.null(binCol)) stop("You specified binCol but didn't provided a data.table object for x")

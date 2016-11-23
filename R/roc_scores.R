@@ -34,6 +34,18 @@ roc_scores <- function(preds, actuals){
   # For samples whose position is on the correct side of the overall mean, 0 is given
   # For samples whose position is on the wrong side of the overall mean, its distance from the mean is given
   
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  ROCPosition <- NULL
+  Pred <- NULL
+  Err <- NULL
+  Actual <- NULL
+  Count <- NULL
+  Value <- NULL
+  
+  #--------------------------------------------------
+  
   overall <- mean(actuals)
   dt <- data.table(Pred=preds, Actual=actuals)
   dt[, ROCPosition := (frank(Pred) - 1) / (.N - 1)]

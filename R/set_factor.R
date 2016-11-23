@@ -7,6 +7,14 @@ set_factor <- function(vectorList, aggregationThreshold=0){
   # Converts each vector in vectorList to an unordered factor with levels equal to the values of their union
   # Any values whose count is equal to or less than aggregationThreshold will be set to "_other_"
   # NA will remain NA
+  
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  Count <- NULL
+  Value <- NULL
+  
+  #--------------------------------------------------
 
   valsDT <- data.table(Value=unlist(lapply(vectorList, as.character)), ListIdx=rep(1:length(vectorList), times=sapply(vectorList, length)))
 

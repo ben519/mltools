@@ -60,6 +60,22 @@
 sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   # Convert a data.table object to a sparse matrix (class "dgCMatrix")
   
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  NACol <- NULL
+  ColumnIdx <- NULL
+  NewColumn <- NULL
+  Column <- NULL
+  PcntNA <- NULL
+  Type <- NULL
+  ColIdx <- NULL
+  SparseRowIdx <- NULL
+  Val <- NULL
+  variable <- NULL
+  
+  #--------------------------------------------------
+  
   # Check inputs
   if(! naCols %in% c("none", "identify", "efficient")) 
     stop("Argument 'naCols' not recognized. Should be one of {\"none\", \"identify\", \"efficient\"}")
@@ -147,7 +163,7 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   cols.ofactor <- cols[Type %in% c("ordered factor")]$Column
   if(length(cols.ofactor) > 0){
     sparse.ofactors <- dt[, cols.ofactor, with=FALSE]
-    for(col in cols.ofactor) set(sparse.ofactors, j=col, val=as.numeric(sparse.ofactors[[col]]))
+    for(col in cols.ofactor) set(sparse.ofactors, j=col, value=as.numeric(sparse.ofactors[[col]]))
     if(sparsifyNAs) for(col in cols.ofactor) set(sparse.ofactors, j=col, value=replace_na(sparse.ofactors[[col]], 0L))
     sparse.ofactors <- Matrix(as.matrix(sparse.ofactors), sparse=TRUE)
     matList <- c(matList, list(sparse.ofactors))

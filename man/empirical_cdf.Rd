@@ -23,6 +23,7 @@ and pass a named list of vectors for \code{ubounds} to return a grid of upper
 bounds that is the cartesian product of the vectors in \code{ubounds}
 }
 \examples{
+library(data.table)
 dt <- data.table(x=c(0.3, 1.3, 1.4, 3.6), y=c(1.2, 1.2, 3.8, 3.9))
 empirical_cdf(dt$x, ubounds=as.numeric(1:4))
 empirical_cdf(dt, ubounds=list(x=as.numeric(1:4)))

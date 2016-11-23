@@ -5,6 +5,13 @@
 
 skewness <- function(dt){
   # Display the skewness of each field
+  
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  Count <- NULL
+  
+  #--------------------------------------------------
 
   skewnessList <- list()
 

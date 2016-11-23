@@ -28,6 +28,12 @@ folds <- function(x, nfolds=5L, stratified=FALSE, seed=NULL){
   # If stratified=TRUE, resulting map will ensure that an equal number (possibly off by 1) of each class in x gets mapped to each fold
   
   #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  FoldID <- NULL
+  Target <- NULL
+  
+  #--------------------------------------------------
   # If x is a data.table
   
   if(is(x, "data.table")){

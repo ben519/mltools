@@ -50,10 +50,18 @@ instead of \code{vals}, a full copy of \code{dt} is created and merged with the 
 \examples{
 library(data.table)
 iris.dt <- data.table(iris)
+
+# custom bins
 bin_data(iris.dt, binCol="Sepal.Length", bins=c(4, 5, 6, 7, 8))
-bin_data(iris$Petal.Length, bins=10, returnDT=TRUE)  # 10 equally spaced bins
-bin_data(c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)  # make the last bin [left-closed, right-open)
-bin_data(c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)  # bin values by quantile
+
+# 10 equally spaced bins
+bin_data(iris$Petal.Length, bins=10, returnDT=TRUE)
+
+# make the last bin [left-closed, right-open)
+bin_data(c(0,0,1,2), bins=2, boundaryType="lcro)", returnDT=TRUE)
+
+# bin values by quantile
+bin_data(c(0,0,0,0,1,2,3,4), bins=4, binType="quantile", returnDT=TRUE)
 
 }
 

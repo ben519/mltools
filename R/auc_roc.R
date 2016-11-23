@@ -17,6 +17,7 @@
 #'
 #' @export
 #' @import data.table
+#' @importFrom methods is
 #'
 #' @examples
 #' preds <- c(.1, .3, .3, .9)
@@ -27,7 +28,21 @@
 auc_roc <- function(preds, actuals, returnDT=FALSE){
   # Calculate area under the ROC curve
   # If returnDT = TRUE, a data.table is returned
-
+  
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  Pred <- NULL
+  Actual <- NULL
+  CumulativeFPR <- NULL
+  CountFalse <- NULL
+  CumulativeTPR <- NULL
+  CountTrue <- NULL
+  AdditionalArea <- NULL
+  CumulativeArea <- NULL
+  
+  #--------------------------------------------------
+  
   # Check if every prediction is identical and if so, return 0.5
   if(length(unique(preds)) == 1) return(0.5)
   
@@ -39,7 +54,7 @@ auc_roc <- function(preds, actuals, returnDT=FALSE){
   dt <- data.table(Pred=preds, Actual=actuals*1L)
   setorder(dt, -Pred)
 
-  bg <- dt[, list(CountFalse=sum(Actual==0), CountTrue=sum(Actual)), by=list(Pred)]
+  bg <- dt[, list(CountFalse=sum(Actual==0), CountTrue=sum(Actual)), by=Pred]
 
   # Calculate the CumulativeFalsePositiveRate and CumulativeTruePositiveRate
   bg[, CumulativeFPR := cumsum(CountFalse)/sum(CountFalse)]

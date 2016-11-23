@@ -16,6 +16,7 @@
 #' For multivariate version, a list whose names correspond to columns of x
 #'
 #' @examples
+#' library(data.table)
 #' dt <- data.table(x=c(0.3, 1.3, 1.4, 3.6), y=c(1.2, 1.2, 3.8, 3.9))
 #' empirical_cdf(dt$x, ubounds=as.numeric(1:4))
 #' empirical_cdf(dt, ubounds=list(x=as.numeric(1:4)))
@@ -32,6 +33,15 @@ empirical_cdf <- function(x=NULL, ubounds){
   # x can be a numeric vector or a data.table
   # If x is a vector, ubounds should be a vector
   # If x is a data.table, ubounds should be a named list of vectors
+  
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  BoundID <- NULL
+  N <- NULL
+  N.cum <- NULL
+  
+  #--------------------------------------------------
   
   # Build uboundsDT (cartesian product of all passed ubounds)
   if(mode(ubounds) != "list") ubounds <- list(UpperBound=ubounds)

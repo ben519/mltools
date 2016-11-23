@@ -2,11 +2,24 @@
 #'
 #' @export
 #' @import data.table
+#' @importFrom stats weighted.mean
 
 gini_impurities <- function(dt, wide=FALSE, verbose=FALSE){
   # Returns pairs of categorical fields (cat1, cat2, GiniImpurity) where GiniImpurity is the weighted gini impurity of
   # cat2 relative to the groups determined by cat1
   # NA values are treated as if they were another factor level
+  
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  Var1 <- NULL
+  Var2 <- NULL
+  GiniImpurity <- NULL
+  N <- NULL
+  value <- NULL
+  Samples <- NULL
+  variable <- NULL
+  i.GiniImpurity <- NULL
 
   #--------------------------------------------------
   # Subset dt by just the categorical fields
