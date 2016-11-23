@@ -6,7 +6,22 @@
 \usage{
 gini_impurities(dt, wide = FALSE, verbose = FALSE)
 }
+\arguments{
+\item{dt}{A data.table with at least two columns}
+
+\item{wide}{Should the results be in wide format?}
+
+\item{verbose}{Should progress be printed to the screen?}
+}
 \description{
-Gini Impurities
+Identify group weighted gini impurities using pairs of columns within a dataset. Can be used to located hierarchical data, or 1-1 correspondences
+}
+\details{
+For pairs of columns (Var1, Var2) in a dataset, calculates the weighted gini impurity of Var2 relative to the groups determined by Var1
+}
+\examples{
+library(data.table)
+gini_impurities(alien.train)
+gini_impurities(alien.train, wide=TRUE)
 }
 
