@@ -55,17 +55,17 @@ auc_roc <- function(preds, actuals, returnDT=FALSE){
   dt <- data.table(Pred=preds, Actual=actuals*1L)
   setorder(dt, -Pred)
 
-  bg <- dt[, list(CountFalse=sum(Actual==0), CountTrue=sum(Actual)), by=Pred]
+  dt <- dt[, list(CountFalse=sum(Actual==0), CountTrue=sum(Actual)), by=Pred]
 
   # Calculate the CumulativeFalsePositiveRate and CumulativeTruePositiveRate
-  bg[, CumulativeFPR := cumsum(CountFalse)/sum(CountFalse)]
-  bg[, CumulativeTPR := cumsum(CountTrue)/sum(CountTrue)]
+  dt[, CumulativeFPR := cumsum(CountFalse)/sum(CountFalse)]
+  dt[, CumulativeTPR := cumsum(CountTrue)/sum(CountTrue)]
 
   # Calculate AUC ROC
-  bg[, AdditionalArea := c(head(CumulativeFPR, 1) * head(CumulativeTPR, 1)/2,
+  dt[, AdditionalArea := c(head(CumulativeFPR, 1) * head(CumulativeTPR, 1)/2,
                            (tail(CumulativeFPR, -1) - head(CumulativeFPR, -1)) * (head(CumulativeTPR, -1) + (tail(CumulativeTPR, -1) - head(CumulativeTPR, -1))/2))]
-  bg[, CumulativeArea := cumsum(AdditionalArea)]
+  dt[, CumulativeArea := cumsum(AdditionalArea)]
 
   # Return the desired result
-  if(returnDT) return(bg[]) else return(tail(bg$CumulativeArea, 1))
+  if(returnDT) return(dt[]) else return(tail(dt$CumulativeArea, 1))
 }

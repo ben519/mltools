@@ -19,5 +19,19 @@ alien.train
 \description{
 A dataset describing features of living beings and whether or not they are an alien
 }
+\details{
+library(data.table)
+
+alien.train <- data.table::data.table(
+  SkinColor=c("green", "white", "brown", "white", "blue", "white", "green", "white"),
+  IQScore=c(300, 95, 105, 250, 115, 85, 130, 115),
+  Cat1=c("type1", "type1", "type2", "type4", "type2", "type4", "type1", "type1"),
+  Cat2=c("type1", "type2", "type6", "type5", "type7", "type5", "type2", "type1"),
+  Cat3=c("type4", "type4", "type11", "type2", "type11", "type2", "type4", "type4"),
+  IsAlien=c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, FALSE)
+)
+
+save(alien.train, file="data/alien_train.rda")
+}
 \keyword{datasets}
 
