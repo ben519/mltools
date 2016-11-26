@@ -15,7 +15,7 @@ replace_na(x, repl = "auto")
 Convience method for returning a copy of a vector such that NA values are substituted with a replacement value
 }
 \details{
-Returns a copy of x such that NAs get replaced with a replacement value.  Default replacement value is 0.
+Returns a copy of \code{x} such that NAs get replaced with a replacement value.  Default replacement value is 0.
 }
 \examples{
 replace_na(c(1, NA, 1, 0))

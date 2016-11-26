@@ -5,7 +5,7 @@
 #' Convience method for returning a copy of a vector such that NA values are substituted with a replacement value
 #' 
 #' @details
-#' Returns a copy of x such that NAs get replaced with a replacement value.  Default replacement value is 0.
+#' Returns a copy of \code{x} such that NAs get replaced with a replacement value.  Default replacement value is 0.
 #' 
 #' @param x vector of values
 #' @param repl what to substitute in place of NAs

@@ -17,9 +17,9 @@ is a data.table then \code{stratified} should be FALSE or the name of a column i
 \item{seed}{Random number seed}
 }
 \description{
-Map an object x into equal (or nearly equal) size fold
-If x is a vector, a matching fector of FoldIDs is returned
-If x is a data.table, a list of partitions of x is returned
+Map an object \code{x} into equal (or nearly equal) size folds.
+If \code{x} is a vector, a matching vector of FoldIDs is returned.
+If \code{x} is a data.table, a list of partitions of x is returned.
 }
 \details{
 Convenient method for mapping an object into equal size folds, potentially with stratification

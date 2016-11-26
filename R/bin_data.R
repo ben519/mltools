@@ -7,7 +7,7 @@
 #' Values may be provided as a vector or via a pair of parameters - a data.table object and the name of the column to bin.
 #'
 #' @details
-#' This method can return two different types of output, depending on where \code{returnDT} is \code{TRUE} or \code{FALSE}.
+#' This function can return two different types of output, depending on whether \code{returnDT} is \code{TRUE} or \code{FALSE}.
 #'
 #' If \code{returnDT=FALSE}, returns an ordered factor vector of bins like [1, 2), [-3,-2), ... corresponding to the values which were
 #' binned and whose levels correspond to all the generated bins. (Note that empty bins may be present as unused factor levels).

@@ -13,7 +13,7 @@ roc_scores(preds, actuals)
 }
 \description{
 This function provides a way to identify the worst predictions when measuring Area Under the ROC curve. Simply
-put, the 'worst' predictions are the ones with very low or high relative prediction scores (usually probabilities) 
+put, the worst predictions are the ones with very low or high relative prediction scores (usually probabilities) 
 which relate to the positive and negative samples respectively.
 }
 \details{

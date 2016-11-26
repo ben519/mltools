@@ -14,8 +14,8 @@ of class frequencies like c(red=2, blue=1, green=1)}
 Calculates the Gini Impurity of a set
 }
 \details{
-Gini Impurity is a measure of how often a randomly chosen element from the set would be
-incorrectly labeled if it was randomly labeled according to the distribution of labels in the set
+Gini Impurity is a measure of how often a randomly chosen element from a set would be
+incorrectly labeled if it was randomly labeled according to the distribution of labels in the set.
 }
 \examples{
 gini_impurity(c("red", "red", "blue", "green"))
