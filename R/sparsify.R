@@ -5,7 +5,7 @@
 #' Convert a data.table object into a sparse matrix (with the same number of rows).
 #'
 #' @details
-#' Converts a data.table object to a sparse matrix (class "dgCMatrix"). Requires the Matrix package. 
+#' Converts a data.table object to a sparse matrix (class "dgCMatrix"). Requires the \pkg{Matrix} package. 
 #' All sparsified data is assumed to take on the value 0/FALSE 
 #' 
 #' ### Data Type | Description & NA handling
