@@ -8,7 +8,7 @@ The goal of this package is multifold:
 
 - Speed up data preparation for feeding machine-learning models
 - Identify structure and patterns in a dataset
-- Evaluating the results of a machine-learning model
+- Evaluate the results of a machine-learning model
 
 Installation
 ------
