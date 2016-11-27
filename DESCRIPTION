@@ -6,6 +6,8 @@ Author: Ben Gorman
 Maintainer: Ben Gorman <bgorman@GormAnalysis.com>
 Description: A collection of functions for machine learning including evaluation metrics, data binning methods, one-hot encoding, cross-validation fold generation, and tools for exploratory analysis. Makes heavy use of the 'data.table' package.
 License: MIT + file LICENSE
+URL: https://github.com/ben519/mltools
+BugReports: https://github.com/ben519/mltools/issues
 LazyData: TRUE
 RoxygenNote: 5.0.1
 Imports:
