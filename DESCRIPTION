@@ -1,7 +1,7 @@
 Package: mltools
 Type: Package
 Title: Machine Learning Tools
-Version: 0.1.0
+Version: 0.1.0.9000
 Author: Ben Gorman
 Maintainer: Ben Gorman <bgorman@GormAnalysis.com>
 Description: A collection of machine learning helper functions, particularly assisting in the Exploratory Data Analysis phase. 
