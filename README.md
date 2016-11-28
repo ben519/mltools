@@ -13,6 +13,12 @@ The goal of this package is multifold:
 Installation
 ------
 
+#### CRAN
+```r
+install.packages("mltools")
+```
+
+#### or Github (development version)
 ```r
 install.packages("devtools")
 
