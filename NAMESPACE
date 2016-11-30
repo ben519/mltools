@@ -2,6 +2,7 @@
 
 export(auc_roc)
 export(bin_data)
+export(date_factor)
 export(empirical_cdf)
 export(explore_dataset)
 export(exponential_weight)
