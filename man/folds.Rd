@@ -12,7 +12,8 @@ folds(x, nfolds = 5L, stratified = FALSE, seed = NULL)
 \item{nfolds}{How many folds?}
 
 \item{stratified}{If x is a vector then TRUE or FALSE indicating whether x's split the class's of x proportionally. If x
-is a data.table then \code{stratified} should be FALSE or the name of a column in x on which to perform stratification.}
+is a data.table then \code{stratified} should be FALSE or the name of a column in x on which to perform stratification. Note
+that stratification is implemented for categorical, logical, AND numeric x}
 
 \item{seed}{Random number seed}
 }
@@ -25,8 +26,10 @@ If \code{x} is a data.table, a list of partitions of x is returned.
 Convenient method for mapping an object into equal size folds, potentially with stratification
 }
 \examples{
+library(data.table)
 folds(alien.train$IsAlien, nfolds=2)
 folds(alien.train$IsAlien, nfolds=2, stratified=TRUE, seed=2016)
+folds(alien.train$IQScore, nfolds=2, stratified=TRUE, seed=2016)
 folds(alien.train, nfolds=2, stratified="IsAlien", seed=2016)
 
 }
