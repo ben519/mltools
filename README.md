@@ -1,4 +1,6 @@
 # mltools
+[![](http://cranlogs.r-pkg.org/badges/mltools)](http://cran.rstudio.com/web/packages/mltools/index.html)
+
 Exploratory and diagnostic machine learning tools for R
 
 About
