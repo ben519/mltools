@@ -7,32 +7,26 @@
 #' calculate P(x <= X, y <= Y, z <= Z, ...)
 #'
 #' @details
-#' Calculate the empirical CDF of a vector. Alternatively, leave \code{x} blank 
-#' and pass a named list of vectors for \code{ubounds} to return a grid of upper 
-#' bounds that is the cartesian product of the vectors in \code{ubounds}
+#' Calculate the empirical CDF of a vector, or data.table with multiple columns for multivariate use.
 #' 
-#' @param x Numeric vector or a data.table object
+#' @param x Numeric vector or a data.table object for multivariate use.
 #' @param ubounds A vector of upper bounds on which to evaluate the CDF.
-#' For multivariate version, a list whose names correspond to columns of x
+#' For multivariate version, a data.table whose names correspond to columns of x.
 #'
 #' @examples
 #' library(data.table)
 #' dt <- data.table(x=c(0.3, 1.3, 1.4, 3.6), y=c(1.2, 1.2, 3.8, 3.9))
-#' empirical_cdf(dt$x, ubounds=as.numeric(1:4))
-#' empirical_cdf(dt, ubounds=list(x=as.numeric(1:4)))
-#' empirical_cdf(dt, ubounds=list(x=as.numeric(1:4), y=as.numeric(1:4)))
-#' empirical_cdf(ubounds=list(x=as.numeric(1:4), y=as.numeric(1:4), z=as.numeric(1:2)))
+#' empirical_cdf(dt$x, ubounds=1:4)
+#' empirical_cdf(dt, ubounds=CJ(x = 1:4, y = 1:4))
 #' 
 #' @export
 #' @import data.table
 
-empirical_cdf <- function(x=NULL, ubounds){
+empirical_cdf <- function(x, ubounds){
   # Build the empirical_cdf of the given data
-  # CDF points are the points given by ubounds, and if ubounds is a list of
-  # bounds, the CDF points are the cartesian product of vectors in ubounds
+  # CDF points are the points given by ubounds
   # x can be a numeric vector or a data.table
-  # If x is a vector, ubounds should be a vector
-  # If x is a data.table, ubounds should be a named list of vectors
+  # ubounds can be a numeric vector or a data.table, but must correspond to x accordingly
   
   #--------------------------------------------------
   # Hack to pass 'no visible binding for global variable' notes from R CMD check
@@ -42,76 +36,97 @@ empirical_cdf <- function(x=NULL, ubounds){
   N.cum <- NULL
   
   #--------------------------------------------------
+  # Check the input
   
-  # Build uboundsDT (cartesian product of all passed ubounds)
-  if(mode(ubounds) != "list") ubounds <- list(UpperBound=ubounds)
+  if(!is.numeric(x) & !is.data.table(x))
+    stop("x must be numeric or a data.table object")
   
-  # If x is NULL, simply return uboundsDT
-  if(is.null(x)){
-    uboundsDT <- do.call(CJ, ubounds)[, BoundID := .I]
-    setcolorder(uboundsDT, unique(c("BoundID", colnames(uboundsDT))))
-    return(uboundsDT[])
+  if(!is.numeric(ubounds) & !is.data.table(ubounds))
+    stop("ubounds must be numeric or a data.table object")
+  
+  if(is.data.table(ubounds)){
+    if(ncol(ubounds) > 1){
+      if(!is.data.table(x)){
+        stop("If ubounds is a data.table with multiple columns, x should be a data.table object with corresponding columns")
+      } else if(length(setdiff(colnames(ubounds), colnames(x))) > 0)
+        stop("ubounds contains columns not found in x")
+    }
+  }
+  
+  if(is.data.table(x)){
+    if(ncol(x) > 1 & !is.data.table(ubounds)){
+      stop("If x is a data.table with multiple columns, ubounds must be a data.table with at least one column otherwise it is unclear which column of x ubounds relates to.")
+    }
+  }
+  
+  #--------------------------------------------------
+  
+  # Build ubounds
+  if(!is.data.table(ubounds)){
+    ubounds <- data.table(UpperBound = ubounds)
+    if(is.data.table(x)) setnames(ubounds, "UpperBound", colnames(x))  # Here, colnames(x) should be one value
   }
   
   # If x is a vector
   if(mode(x) == "numeric"){
     
-    # Make sure ubounds's names are appropriate
-    if(length(ubounds) > 1) stop("ubounds is a list of more than 1 element, but x is a vector")
-    if(names(ubounds) == "") names(ubounds) <- "UpperBound"
-    
     # Convert x to a data.table object
-    xDT <- data.table(x)
-    setnames(xDT, names(ubounds))
-    
-    # recursion
-    return(empirical_cdf(xDT, ubounds))
+    x <- data.table(x)
+    setnames(x, names(ubounds))
   }
   
   #--------------------------------------------------
   # From here on, assume x is a data.table
   
-  # Make sure the names of the ubounds list are all columns of x
-  if(length(setdiff(names(ubounds), colnames(x))) > 0) stop("ubounds doesn't correspond to the columns in x")
+  # Convert columns of x and ubounds to numeric. This is to fix a data.table bug involving rolling joins on integer columns
+  x <- x[, colnames(ubounds), with=F]
+  ubounds <- copy(ubounds)
+  for(col in colnames(ubounds)){
+    set(x, j=col, value=as.numeric(x[[col]]))
+    set(ubounds, j=col, value=as.numeric(ubounds[[col]]))
+  }
   
-  # Build the grid of upper bounds
-  for(bound in names(ubounds)) ubounds[[bound]] <- sort(ubounds[[bound]])  # Force sorted bounds
-  uboundsDT <- do.call(CJ, ubounds)
+  # Reduce to uniques
+  uboundsUniques <- unique(ubounds)
   
   # Build a copy of x
-  binned <- copy(x[, names(uboundsDT), with=FALSE])
+  binned <- copy(x[, names(uboundsUniques), with=FALSE])
   
   # For each binning column, match each row of x to the nearest boundary above
-  for(col in names(uboundsDT)){
-    uboundDT <- data.table(ubounds[[col]], ubounds[[col]]); setnames(uboundDT, c(col, paste0("Bound.", col)))
+  for(col in names(uboundsUniques)){
+    uboundDT <- data.table(uboundsUniques[[col]], uboundsUniques[[col]])
+    setnames(uboundDT, c(col, paste0("Bound.", col)))
     binned <- uboundDT[binned, on=col, roll=-Inf, nomatch=0]
   }
   
-  # Aggregate to unique (BoundHitSpeed, BoundHLA, BoundVLA) tuples
+  # Aggregate to unique tuples based on Bound.* columns
   binned.uniques <- binned[, .N, keyby=eval(paste0("Bound.", names(ubounds)))]
   setnames(binned.uniques, paste0("Bound.", names(ubounds)), names(ubounds))
   
   # Get the count of samples directly below EVERY bound
-  uboundsDT <- binned.uniques[uboundsDT, on=names(ubounds)]
-  uboundsDT[is.na(N), N := 0]
+  uboundsUniques <- binned.uniques[uboundsUniques, on=names(ubounds)]
+  uboundsUniques[is.na(N), N := 0]
   
   # Counting (see http://stackoverflow.com/a/40583817/2146894)
   if(length(ubounds) == 1){
-    uboundsDT[, N.cum := cumsum(N)]
+    uboundsUniques[, N.cum := cumsum(N)]
   } else{
     fixedCols <- names(ubounds)[-1]
-    uboundsDT[, N.cum := cumsum(N), by=fixedCols]
+    uboundsUniques[, N.cum := cumsum(N), by=fixedCols]
     
     for(i in seq_len(length(ubounds) - 1)){
       i = i + 1
       fixedCols <- names(ubounds)[-i]
-      uboundsDT[, N.cum := cumsum(N.cum), by=fixedCols]
+      uboundsUniques[, N.cum := cumsum(N.cum), by=fixedCols]
     }
   }
   
   # Cleanup
   samples <- nrow(x)
-  uboundsDT[, `:=`(N = NULL, CDF = N.cum/samples)]
+  uboundsUniques[, `:=`(N = NULL, CDF = N.cum/samples)]
   
-  return(uboundsDT[])
+  # Join back to ubounds in case of potential duplicate ubounds
+  ubounds <- uboundsUniques[ubounds, on=names(ubounds)]
+  
+  return(ubounds[])
 }

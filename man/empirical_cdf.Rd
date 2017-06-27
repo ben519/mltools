@@ -4,13 +4,13 @@
 \alias{empirical_cdf}
 \title{Empirical Cumulative Distribution Function}
 \usage{
-empirical_cdf(x = NULL, ubounds)
+empirical_cdf(x, ubounds)
 }
 \arguments{
-\item{x}{Numeric vector or a data.table object}
+\item{x}{Numeric vector or a data.table object for multivariate use.}
 
 \item{ubounds}{A vector of upper bounds on which to evaluate the CDF.
-For multivariate version, a list whose names correspond to columns of x}
+For multivariate version, a data.table whose names correspond to columns of x.}
 }
 \description{
 Given a vector x, calculate P(x <= X) for a set of upper bounds X.
@@ -18,16 +18,12 @@ Can be applied to a data.table object for multivariate use. That is,
 calculate P(x <= X, y <= Y, z <= Z, ...)
 }
 \details{
-Calculate the empirical CDF of a vector. Alternatively, leave \code{x} blank 
-and pass a named list of vectors for \code{ubounds} to return a grid of upper 
-bounds that is the cartesian product of the vectors in \code{ubounds}
+Calculate the empirical CDF of a vector, or data.table with multiple columns for multivariate use.
 }
 \examples{
 library(data.table)
 dt <- data.table(x=c(0.3, 1.3, 1.4, 3.6), y=c(1.2, 1.2, 3.8, 3.9))
-empirical_cdf(dt$x, ubounds=as.numeric(1:4))
-empirical_cdf(dt, ubounds=list(x=as.numeric(1:4)))
-empirical_cdf(dt, ubounds=list(x=as.numeric(1:4), y=as.numeric(1:4)))
-empirical_cdf(ubounds=list(x=as.numeric(1:4), y=as.numeric(1:4), z=as.numeric(1:2)))
+empirical_cdf(dt$x, ubounds=1:4)
+empirical_cdf(dt, ubounds=CJ(x = 1:4, y = 1:4))
 
 }
