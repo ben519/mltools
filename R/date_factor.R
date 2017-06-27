@@ -37,8 +37,13 @@ date_factor <- function(dateVec, type="yearmonth", fullyears=TRUE){
     minDate <- as.Date(paste0(year(minDate), "-1-1"))
     maxDate <- as.Date(paste0(year(maxDate), "-12-1"))
   } else{
-    minDate <- as.Date(paste0(year(minDate), "-", month(minDate), "-1"))
-    maxDate <- as.Date(paste0(year(maxDate), "-", month(maxDate), "-1"))
+    if(type == "yearquarter"){
+      minDate <- as.Date(paste0(year(minDate), "-", floor(month(minDate)/3)*3L + 1L, "-1"))
+      maxDate <- as.Date(paste0(year(maxDate), "-", floor(month(maxDate)/3)*3L + 1L, "-1"))
+    } else{
+      minDate <- as.Date(paste0(year(minDate), "-", month(minDate), "-1"))
+      maxDate <- as.Date(paste0(year(maxDate), "-", month(maxDate), "-1"))
+    }
   }
   
   if(type == "yearmonth"){
