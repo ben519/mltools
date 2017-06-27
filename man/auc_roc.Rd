@@ -30,4 +30,3 @@ auc_roc(preds, actuals, returnDT=TRUE)
 \references{
 \url{https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve}
 }
-

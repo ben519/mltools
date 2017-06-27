@@ -19,4 +19,3 @@ Counts the frequency of each value in each column, then displays the results in 
 library(data.table)
 skewness(alien.train)
 }
-

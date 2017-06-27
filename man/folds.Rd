@@ -33,4 +33,3 @@ folds(alien.train$IQScore, nfolds=2, stratified=TRUE, seed=2016)
 folds(alien.train, nfolds=2, stratified="IsAlien", seed=2016)
 
 }
-

@@ -27,4 +27,3 @@ exponential_weight(1:3, slope=1)
 exponential_weight(1:3, slope=10)
 
 }
-

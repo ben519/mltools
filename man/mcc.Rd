@@ -42,4 +42,3 @@ mcc(TP=3, FP=2, TN=2, FN=1)
 \references{
 \url{https://en.wikipedia.org/wiki/Matthews_correlation_coefficient}
 }
-

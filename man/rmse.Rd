@@ -28,4 +28,3 @@ rmse(preds, actuals)
 \references{
 \url{https://en.wikipedia.org/wiki/Root-mean-square_deviation}
 }
-

@@ -42,4 +42,3 @@ one_hot(dt, dropCols=FALSE)
 one_hot(dt, dropUnusedLevels=TRUE)
 
 }
-

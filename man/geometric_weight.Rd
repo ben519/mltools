@@ -25,4 +25,3 @@ geometric_weight(1:3, n=3, r=.5)
 geometric_weight(1:3, n=3, r=2)
 
 }
-

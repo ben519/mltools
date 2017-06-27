@@ -22,4 +22,3 @@ gini_impurity(c("red", "red", "blue", "green"))
 gini_impurity(c(red=2, blue=1, green=1))
 
 }
-

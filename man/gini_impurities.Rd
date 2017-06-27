@@ -24,4 +24,3 @@ library(data.table)
 gini_impurities(alien.train)
 gini_impurities(alien.train, wide=TRUE)
 }
-

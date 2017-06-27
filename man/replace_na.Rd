@@ -21,4 +21,3 @@ Returns a copy of \code{x} such that NAs get replaced with a replacement value. 
 replace_na(c(1, NA, 1, 0))
 
 }
-

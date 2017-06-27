@@ -60,4 +60,3 @@ sparsify(dt, sparsifyNAs=TRUE)
 sparsify(dt[, list(realCol)], naCols="identify")
 sparsify(dt[, list(realCol)], naCols="efficient")
 }
-

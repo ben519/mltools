@@ -34,4 +34,3 @@ alien.train <- data.table::data.table(
 save(alien.train, file="data/alien_train.rda")
 }
 \keyword{datasets}
-

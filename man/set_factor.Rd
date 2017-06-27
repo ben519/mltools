@@ -22,4 +22,3 @@ y <- c("a", "d", "d")
 set_factor(list(x, y))
 set_factor(list(x, y), aggregationThreshold=1)
 }
-

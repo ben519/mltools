@@ -22,4 +22,3 @@ relative_position(c(1, 2, 2, 3))
 relative_position(c(1, NA, 3, 4))
 
 }
-

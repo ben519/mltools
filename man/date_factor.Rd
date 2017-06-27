@@ -9,7 +9,7 @@ date_factor(dateVec, type = "yearmonth", fullyears = TRUE)
 \arguments{
 \item{dateVec}{A vector of date values}
 
-\item{type}{One of {"yearmonth", "yearquarter", "quarter", "month"}}
+\item{type}{One of {"year", "yearquarter", "yearmonth", "quarter", "month"}}
 
 \item{fullyears}{Should levels will always start and end at the end of a year? 
 For example \code{date_factor(as.Date(c("2016-4-1", "2016-7-1")), "yearquarter", fullyears=TRUE)} will return a factor with
@@ -29,4 +29,3 @@ date_factor(dts, type="yearquarter")
 date_factor(dts, type="yearquarter", fullyears=FALSE)
 
 }
-

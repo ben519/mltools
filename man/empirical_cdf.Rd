@@ -31,4 +31,3 @@ empirical_cdf(dt, ubounds=list(x=as.numeric(1:4), y=as.numeric(1:4)))
 empirical_cdf(ubounds=list(x=as.numeric(1:4), y=as.numeric(1:4), z=as.numeric(1:2)))
 
 }
-
