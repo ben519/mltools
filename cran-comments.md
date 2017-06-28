@@ -17,3 +17,4 @@ None.
 
 - Fixed bug in `date_factor()` occuring when type = "yearquarter" and fullyears = FALSE
 - Fixed bugs involving unsorted or duplicate ubounds in `empirical_cdf()`
+- Fixed CRAN hyperlinks from http to https
