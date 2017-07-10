@@ -66,7 +66,6 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
 
   # Two call formats:
   # Provide a vector of values to be binned or
-  # Provide a data.table object and specify the column of values to be binned (binCol)
   # bins can be a single integer, a vector of numbers, or a 2-column data.frame/data.table specifiying LBs and RBs
   # binType is one of {"explicit", "quantile"}
   # boundaryType is one of {"lcro]", "lcro)", "[lorc", "(lorc"} (i.e. "left-closed right-open" or "left-open right-closed",
@@ -80,7 +79,6 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   LB <- NULL
   RB <- NULL
   Bin <- NULL
-  dt <- NULL
   BinCol <- NULL
   i.Bin <- NULL
   
@@ -92,7 +90,7 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   #--------------------------------------------------
   # Build binDT
 
-  if(is(x, "data.table")) vals <- x[[binCol]] else vals <- x
+  if(is(x, "data.table")) vals <- as.numeric(x[[binCol]]) else vals <- as.numeric(x)
 
   # Get the bin values
   if(binType == "explicit"){
@@ -145,7 +143,7 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   #--------------------------------------------------
   # Determine the Bin for each row in dt
 
-  if(is.null(vals)) binData <- dt[, list(BinCol=get(binCol))] else binData <- data.table(BinCol=vals)
+  binData <- data.table(BinCol=vals)
 
   if(boundaryType == "lcro]"){
     binData[binDT, on=list(BinCol >= LB, BinCol < RB), Bin := Bin]
@@ -163,13 +161,13 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   # Return the desired result
 
   if(returnDT == FALSE){
-    # If returnDT is FALSE, return the vector of bins corresponding to the rows of dt
+    # If returnDT is FALSE, return the vector of bins corresponding to the rows of x
 
     return(binData$Bin)
   } else{
     # Else return a data.table object with all bin values and potentially extra rows (empty bins)
 
-    if(is(vals, "data.table")) baseDT <- copy(dt) else baseDT <- data.table(BinVal=vals)
+    baseDT <- data.table(BinVal=vals)
     baseDT[, Bin := binData$Bin]  # set the bins
     binnedData <- merge(binDT[, list(Bin)], baseDT, all=TRUE)  # full outer join with binDT
 
