@@ -1,5 +1,9 @@
 # News
 
+## mltools 0.3.1
+
+- Fixed bug in `bin_data()` occuring when `x` is integery type and `bins` includes `Inf` or `-Inf`
+
 ## mltools 0.3.0
 
 - Fixed bug in `date_factor()` occuring when type = "yearquarter" and fullyears = FALSE
