@@ -1,5 +1,5 @@
 ## Test environments
-* local OS X 10.12.5, R 3.4.0
+* local OS X 10.12.5, R 3.4.1
 * win-builder (devel and release)
 
 ## R CMD check results
