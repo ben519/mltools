@@ -5,7 +5,7 @@
 ## R CMD check results
 0 errors | 0 warnings | 0 notes
 
-* Update from version 0.2.0 to 0.3.0
+* Update from version 0.3.0 to 0.3.1
 
 ## Reverse dependencies
 
@@ -15,6 +15,4 @@ None.
 
 ## Updates
 
-- Fixed bug in `date_factor()` occuring when type = "yearquarter" and fullyears = FALSE
-- Fixed bugs involving unsorted or duplicate ubounds in `empirical_cdf()`
-- Fixed CRAN hyperlinks to canonical form
+- Fixed bug in `bin_data()` occuring when `x` is integery type and `bins` includes `Inf` or `-Inf`
