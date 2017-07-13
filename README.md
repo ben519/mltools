@@ -24,9 +24,7 @@ install.packages("mltools")
 #### or Github (development version)
 ```r
 install.packages("devtools")
-
-library(devtools)
-install_github("ben519/mltools")
+devtools::install_github("ben519/mltools")
 ```
 
 Demonstration
@@ -38,7 +36,11 @@ Predict whether or not someone is an alien.
 library(data.table)
 library(mltools)
 
-alien.train
+# Copy the toy datasets since they are locked from being modified
+train <- copy(alien.train)
+test <- copy(alien.test)
+
+train
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
 1:     green     300 type1 type1  type4    TRUE
 2:     white      95 type1 type2  type4   FALSE
@@ -49,7 +51,7 @@ alien.train
 7:     green     130 type1 type2  type4    TRUE
 8:     white     115 type1 type1  type4   FALSE
 
-alien.test
+test
    SkinColor IQScore  Cat1  Cat2  Cat3
 1:     white      79 type4 type5 type2
 2:     green     100 type4 type5 type2
@@ -65,8 +67,8 @@ alien.test
 - What's the cardinality and skewness of each feature?
 
 ```r
-# Combine alien.train (excluding IsAlien) and alien.test
-alien.all <- rbind(alien.train[, !"IsAlien", with=FALSE], alien.test, fill=TRUE)
+# Combine train (excluding IsAlien) and test
+alien.all <- rbind(train[, !"IsAlien", with=FALSE], test)
 
 #--------------------------------------------------
 ## Check for correlated and hierarchical fields
@@ -85,22 +87,25 @@ gini_impurities(alien.all, wide=TRUE)  #  weighted conditional gini impurities
 #--------------------------------------------------
 ## Check relationship between IQScore and IsAlien by binning IQScore into groups
 
-bins <- bin_data(alien.train$IQScore, bins=seq(0, 300, by=50), returnDT=TRUE)
-          Bin SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
-1:   [0, 100)     white      95 type1 type2  type4   FALSE
-2:   [0, 100)     white      85 type4 type5  type2   FALSE
-3: [100, 200)     brown     105 type2 type6 type11   FALSE
-4: [100, 200)      blue     115 type2 type7 type11    TRUE
-5: [100, 200)     green     130 type1 type2  type4    TRUE
-6: [100, 200)     white     115 type1 type1  type4   FALSE
-7: [200, 300]     green     300 type1 type1  type4    TRUE
-8: [200, 300]     white     250 type4 type5  type2    TRUE
+train[, BinIQScore := bin_data(IQScore, bins=seq(0, 300, by=50))]
+   IQScore BinIQScore
+1:     300 [250, 300]
+2:      95  [50, 100)
+3:     105 [100, 150)
+4:     250 [250, 300]
+5:     115 [100, 150)
+6:      85  [50, 100)
+7:     130 [100, 150)
+8:     115 [100, 150)
 
-bins[, list(Samples=sum(!is.na(BinVal)), IQScore=mean(BinVal)), keyby=Bin]
-          Bin Samples IQScore
-1:   [0, 100)       2   90.00
-2: [100, 200)       4  116.25
-3: [200, 300]       2  275.00
+train[, list(Samples=.N, IQScore=mean(IQScore)), keyby=BinIQScore]
+   BinIQScore Samples IQScore
+1:  [50, 100)       2   90.00
+2: [100, 150)       4  116.25
+3: [250, 300]       2  275.00
+
+# Remove column BinIQScore
+train[, BinIQScore := NULL]
 
 #--------------------------------------------------
 ## Check skewness of fields
@@ -135,38 +140,38 @@ set.seed(711)
 ## Set SkinColor as a factor, such that it has the same levels in train and test
 ## Set low frequency skin colors (1 or fewer occurences) as "_other_"
 
-skincolors <- list(alien.train$SkinColor, alien.test$SkinColor)
+skincolors <- list(train$SkinColor, test$SkinColor)
 skincolors <- set_factor(skincolors, aggregationThreshold=1)
-alien.train[, SkinColor := skincolors[[1]] ]  # update train with the new values
-alien.test[, SkinColor := skincolors[[2]] ]  # update test with the new values
+train[, SkinColor := skincolors[[1]] ]  # update train with the new values
+test[, SkinColor := skincolors[[2]] ]  # update test with the new values
 
 # Repeat the process above for other categorical fields (without setting low freq. values as "_other_")
 for(col in c("Cat1", "Cat2", "Cat3")){
-  vals <- list(alien.train[[col]], alien.test[[col]])
+  vals <- list(train[[col]], test[[col]])
   vals <- set_factor(vals)
-  set(alien.train, j=col, value=vals[[1]])
-  set(alien.test, j=col, value=vals[[2]])
+  set(train, j=col, value=vals[[1]])
+  set(test, j=col, value=vals[[2]])
 }
 
 #--------------------------------------------------
 ## Randomly split the training data into 2 equally sized datasets
 
-# Partition alien.train into two folds, stratified by IsAlien
-alien.train[, FoldID := folds(IsAlien, nfolds=2, stratified=TRUE, seed=2016)]
+# Partition train into two folds, stratified by IsAlien
+train[, FoldID := folds(IsAlien, nfolds=2, stratified=TRUE, seed=2016)]
 
-cvtrain <- alien.train[FoldID==1, !"FoldID"]
-   SkinColor IQScore  Cat1  Cat2  Cat3 IsAlien
-1:     green     130 type1 type2 type4    TRUE
-2:     white      95 type1 type2 type4   FALSE
-3:     white      85 type4 type5 type2   FALSE
-4:     white     250 type4 type5 type2    TRUE
-
-cvtest <- alien.train[FoldID==2, !"FoldID"]
+cvtrain <- train[FoldID==1, !"FoldID"]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
-1:     brown     105 type2 type6 type11   FALSE
-2:   _other_     115 type2 type7 type11    TRUE
-3:     green     300 type1 type1  type4    TRUE
+1:     green     300 type1 type1  type4    TRUE
+2:     brown     105 type2 type6 type11   FALSE
+3:     green     130 type1 type2  type4    TRUE
 4:     white     115 type1 type1  type4   FALSE
+
+cvtest <- train[FoldID==2, !"FoldID"]
+   SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien
+1:     white      95 type1 type2  type4   FALSE
+2:     white     250 type4 type5  type2    TRUE
+3:   _other_     115 type2 type7 type11    TRUE
+4:     white      85 type4 type5  type2   FALSE
 
 #--------------------------------------------------
 ## Convert cvtrain and cvtest to sparse matrices
@@ -174,21 +179,21 @@ cvtest <- alien.train[FoldID==2, !"FoldID"]
 
 library(Matrix)
 
-cvtrain.sparse <- sparsify(cvtrain, )
+cvtrain.sparse <- sparsify(cvtrain)
 4 x 21 sparse Matrix of class "dgCMatrix"
      SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1 ...
-[1,]                 .               .               1               .     130          1
-[2,]                 .               .               .               1      95          1
-[3,]                 .               .               .               1      85          .
-[4,]                 .               .               .               1     250          .
+[1,]                 .               .               1               .     300          1
+[2,]                 .               1               .               .     105          .
+[3,]                 .               .               1               .     130          1
+[4,]                 .               .               .               1     115          1
 
 cvtest.sparse <- sparsify(cvtest)
 4 x 21 sparse Matrix of class "dgCMatrix"
      SkinColor__other_ SkinColor_brown SkinColor_green SkinColor_white IQScore Cat1_type1 ...
-[1,]                 .               1               .               .     105          .
-[2,]                 1               .               .               .     115          .
-[3,]                 .               .               1               .     300          1
-[4,]                 .               .               .               1     115          1
+[1,]                 .               .               .               1      95          1
+[2,]                 .               .               .               1     250          .
+[3,]                 1               .               .               .     115          .
+[4,]                 .               .               .               1      85          .
 ```
 
 ### Evaluate model
@@ -206,16 +211,16 @@ cvtest[, Prediction := ifelse(IQScore > 130, TRUE, FALSE)]
 
 # Area Under the ROC Curve (AUC ROC)
 auc_roc(preds=cvtest$Prediction, actuals=cvtest$IsAlien)
-0.67
+0.75
 
 # Individual scores to determine which predictions were good/bad (see help(roc_scores) for details)
 cvtest[, ROCScore := roc_scores(preds=Prediction, actuals=IsAlien)]
 cvtest[order(ROCScore)]
    SkinColor IQScore  Cat1  Cat2   Cat3 IsAlien Prediction  ROCScore
-1:     white      85 type4 type5  type2   FALSE      FALSE 0.0000000
-2:     green     300 type1 type1  type4    TRUE       TRUE 0.0000000
-3:     green     130 type1 type2  type4    TRUE      FALSE 0.4166667
-4:   _other_     115 type2 type7 type11    TRUE      FALSE 0.4166667
+1:     white      95 type1 type2  type4   FALSE      FALSE 0.0000000
+2:     white     250 type4 type5  type2    TRUE       TRUE 0.0000000
+3:     white      85 type4 type5  type2   FALSE      FALSE 0.0000000
+4:   _other_     115 type2 type7 type11    TRUE      FALSE 0.1666667
 ```
 
 ## Contact
