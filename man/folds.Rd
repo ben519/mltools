@@ -7,7 +7,7 @@
 folds(x, nfolds = 5L, stratified = FALSE, seed = NULL)
 }
 \arguments{
-\item{x}{A vector of values or a data.table object}
+\item{x}{A positive integer, a vector of values or a data.table object}
 
 \item{nfolds}{How many folds?}
 
@@ -19,6 +19,7 @@ that stratification is implemented for categorical, logical, AND numeric x}
 }
 \description{
 Map an object \code{x} into equal (or nearly equal) size folds.
+If \code{x} is a positive integer, a vector of FoldIDs of length matching x is returned, otherwise
 If \code{x} is a vector, a matching vector of FoldIDs is returned.
 If \code{x} is a data.table, a list of partitions of x is returned.
 }
@@ -27,6 +28,7 @@ Convenient method for mapping an object into equal size folds, potentially with 
 }
 \examples{
 library(data.table)
+folds(8, nfolds=2)
 folds(alien.train$IsAlien, nfolds=2)
 folds(alien.train$IsAlien, nfolds=2, stratified=TRUE, seed=2016)
 folds(alien.train$IQScore, nfolds=2, stratified=TRUE, seed=2016)
