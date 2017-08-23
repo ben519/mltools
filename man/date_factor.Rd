@@ -4,16 +4,19 @@
 \alias{date_factor}
 \title{Date Factor}
 \usage{
-date_factor(dateVec, type = "yearmonth", fullyears = TRUE)
+date_factor(dateVec, type = "yearmonth", minDate = min(dateVec, na.rm =
+  TRUE), maxDate = max(dateVec, na.rm = TRUE))
 }
 \arguments{
 \item{dateVec}{A vector of date values}
 
 \item{type}{One of {"year", "yearquarter", "yearmonth", "quarter", "month"}}
 
-\item{fullyears}{Should levels will always start and end at the end of a year? 
-For example \code{date_factor(as.Date(c("2016-4-1", "2016-7-1")), "yearquarter", fullyears=TRUE)} will return a factor with
-four levels (Q1, Q2, Q3, Q4) even though only two date values were given.}
+\item{minDate}{(Default = min(dateVec)) When determining factor levels, use this date to set the min level, after coercing 
+dates to the specified \code{type}. For example, if dateVec = (2016-01-15, 2016-02-15), type = "yearmonth", and minDate = 2016-02-01,
+the result will be (NA, Feb 2016).}
+
+\item{maxDate}{(Default = max(dateVec)) When determining factor levels, use this date to set the max level. (See minDate, above)}
 }
 \description{
 Map a vector of dates to a factor at one of these levels {"yearmonth", "yearquarter", "quarter", "month"}
@@ -23,9 +26,9 @@ The resulting vector is an ordered factor of the specified \code{type} (e.g. yea
 }
 \examples{
 library(data.table)
-dts <- as.Date(c("2014-1-1", "2015-1-1", "2015-6-1"))
+dts <- as.Date(c("2014-1-1", "2015-1-15", "2015-6-1"))
 date_factor(dts, type="yearmonth")
 date_factor(dts, type="yearquarter")
-date_factor(dts, type="yearquarter", fullyears=FALSE)
+date_factor(dts, type="yearquarter", minDate = as.Date("2015-1-1"), maxDate = as.Date("2015-12-31"))
 
 }
