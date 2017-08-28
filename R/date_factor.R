@@ -20,6 +20,7 @@
 #' date_factor(dts, type="yearmonth")
 #' date_factor(dts, type="yearquarter")
 #' date_factor(dts, type="yearquarter", minDate = as.Date("2015-1-1"), maxDate = as.Date("2015-12-31"))
+#' date_factor(as.Date(character(0)), type="yearmonth", minDate = as.Date("2016-1-1"), as.Date("2016-12-31"))
 #'
 #' @export
 #' @import data.table
@@ -31,7 +32,14 @@ date_factor <- function(dateVec, type="yearmonth", minDate=min(dateVec, na.rm=TR
   if(!type %in% c("year", "yearquarter", "yearmonth", "quarter", "month"))
     stop('type must be one of {"year", "yearquarter", "yearmonth", "quarter", "month"}')
   
+  if(length(dateVec) == 0 & (is.na(minDate) | is.na(maxDate)))
+     stop("dateVec is length 0. If this is expected, minDate and maxDate must be specified to determine factor levels.")
+  
+  if(minDate > maxDate)
+    stop("minDate > maxDate")
+  
   #--------------------------------------------------
+  # Helpers
   
   # Helper method to get first-of-month of given dates
   first_of_month <- function(somedate, p=as.POSIXlt(somedate)){
@@ -48,11 +56,14 @@ date_factor <- function(dateVec, type="yearmonth", minDate=min(dateVec, na.rm=TR
   #--------------------------------------------------
   # Check that the dateVec values are within minDate, maxDate bounds
   
-  if(first_of_month(minDate) > first_of_month(min(dateVec, na.rm = T)))
-    warning("minDate > min(dateVec). These cases will coerce to NA")
-  
-  if(end_of_month(maxDate) < end_of_month(max(dateVec, na.rm = T)))
-    warning("maxDate < max(dateVec). These cases will coerce to NA")
+  if(length(dateVec) > 0){
+    
+    if(first_of_month(minDate) > first_of_month(min(dateVec, na.rm = T)))
+      warning("minDate > min(dateVec). These cases will coerce to NA")
+    
+    if(end_of_month(maxDate) < end_of_month(max(dateVec, na.rm = T)))
+      warning("maxDate < max(dateVec). These cases will coerce to NA")
+  }
   
   #--------------------------------------------------
   
