@@ -4,6 +4,7 @@
 
 - In `folds(x, ...)` `x` can now be a positive integer specifying the number of fold IDs to generate
 - In `date_factor(dateVec, ...)` the argument `fullyears` has been dropped and replaced by the more flexible pair of arguments `minDate` and `maxDate` for determining resulting vector levels.  Additionally a bug regarding `type=yearquarters` has been fixed.
+- In `bin_data()` added some input validation
 
 ## mltools 0.3.1
 

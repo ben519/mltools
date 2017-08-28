@@ -86,6 +86,12 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   
   if(is(x, "data.table") & is.null(binCol)) stop("binCol must be given")
   if(!is(x, "data.table") & !is.null(binCol)) stop("You specified binCol but didn't provided a data.table object for x")
+  
+  if(!binType %in% c("explicit", "quantile"))
+    stop("binType must be one of {'explicit', 'quantile'}")
+  
+  if(!boundaryType %in% c("explicit", "quantile"))
+    stop('boundaryType must be one of {"lcro]", "lcro)", "[lorc", "(lorc"}')
 
   #--------------------------------------------------
   # Build binDT
