@@ -17,10 +17,20 @@
 #' @examples
 #' library(data.table)
 #' dts <- as.Date(c("2014-1-1", "2015-1-15", "2015-6-1"))
-#' date_factor(dts, type="yearmonth")
-#' date_factor(dts, type="yearquarter")
-#' date_factor(dts, type="yearquarter", minDate = as.Date("2015-1-1"), maxDate = as.Date("2015-12-31"))
-#' date_factor(as.Date(character(0)), type="yearmonth", minDate = as.Date("2016-1-1"), as.Date("2016-12-31"))
+#' date_factor(dts, type = "yearmonth")
+#' date_factor(dts, type = "yearquarter")
+#' date_factor(
+#'   dateVec = dts, 
+#'   type = "yearquarter", 
+#'   minDate = as.Date("2015-1-1"), 
+#'   maxDate = as.Date("2015-12-31")
+#' )
+#' date_factor(
+#'   dateVec = as.Date(character(0)), 
+#'   type = "yearmonth", 
+#'   minDate = as.Date("2016-1-1"), 
+#'   as.Date("2016-12-31")
+#' )
 #'
 #' @export
 #' @import data.table
@@ -28,6 +38,14 @@
 date_factor <- function(dateVec, type="yearmonth", minDate=min(dateVec, na.rm=TRUE), maxDate=max(dateVec, na.rm=TRUE)){
   # return an ordered factor whose values correspond to dateVec
   # type can be one of {"year", "yearquarter", "yearmonth", "quarter", "month"}
+  
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  first_of_month <- NULL
+  end_of_month <- NULL
+  
+  #--------------------------------------------------
   
   if(!type %in% c("year", "yearquarter", "yearmonth", "quarter", "month"))
     stop('type must be one of {"year", "yearquarter", "yearmonth", "quarter", "month"}')
@@ -44,13 +62,13 @@ date_factor <- function(dateVec, type="yearmonth", minDate=min(dateVec, na.rm=TR
   # Helper method to get first-of-month of given dates
   first_of_month <- function(somedate, p=as.POSIXlt(somedate)){
     # Returns the first day in this month
-    return(as.Date(modifyList(p, list(mon=p$mon, mday=1))))
+    return(as.Date(utils::modifyList(p, list(mon=p$mon, mday=1))))
   }
   
   # Helper method to get end-of-month of given dates
   end_of_month <- function(somedate, p=as.POSIXlt(somedate)){
     # Returns the last day in this month
-    return(as.Date(modifyList(p, list(mon=p$mon + 1, mday=0))))
+    return(as.Date(utils::modifyList(p, list(mon=p$mon + 1, mday=0))))
   }
   
   #--------------------------------------------------
