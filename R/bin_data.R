@@ -90,7 +90,7 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   if(!binType %in% c("explicit", "quantile"))
     stop("binType must be one of {'explicit', 'quantile'}")
   
-  if(!boundaryType %in% c("explicit", "quantile"))
+  if(!boundaryType %in% c("lcro]", "lcro)", "[lorc", "(lorc"))
     stop('boundaryType must be one of {"lcro]", "lcro)", "[lorc", "(lorc"}')
 
   #--------------------------------------------------
