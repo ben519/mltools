@@ -86,7 +86,7 @@ date_factor <- function(dateVec, type="yearmonth", minDate=min(dateVec, na.rm=TR
   #--------------------------------------------------
   
   if(type == "yearquarter"){
-    minDate <- as.Date(paste0(year(minDate), "-", floor(month(minDate)/3)*3L + 1L, "-1"))
+    minDate <- as.Date(paste0(year(minDate), "-", ceiling(month(minDate)/3)*3L, "-1"))
     maxDate <- as.Date(paste0(year(maxDate), "-", ceiling(month(maxDate)/3)*3L, "-1"))
   } else{
     minDate <- first_of_month(minDate)

@@ -2,6 +2,8 @@
 
 ## mltools 0.3.2.9000
 
+- In `date_factor(dateVec, ...)` fixed bug in "character string is not in a standard unambiguous format" produced by some date values
+
 ## mltools 0.3.2
 
 - In `folds(x, ...)` `x` can now be a positive integer specifying the number of fold IDs to generate
