@@ -1,7 +1,7 @@
 Package: mltools
 Type: Package
 Title: Machine Learning Tools
-Version: 0.3.3
+Version: 0.3.3.9000
 Author: Ben Gorman
 Maintainer: Ben Gorman <bgorman@GormAnalysis.com>
 Description: A collection of machine learning helper functions, particularly assisting in the Exploratory Data Analysis phase. Makes heavy use of the 'data.table' package for optimal speed and memory efficiency. Highlights include a versatile bin_data() function, sparsify() for converting a data.table to sparse matrix format with one-hot encoding, fast evaluation metrics, and empirical_cdf() for calculating empirical Multivariate Cumulative Distribution Functions.
