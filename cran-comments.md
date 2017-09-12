@@ -16,3 +16,4 @@ None.
 ## Updates
 
 - In `date_factor(dateVec, ...)` fixed bug in "character string is not in a standard unambiguous format" produced by some date values
+- Fixed spacing in Description per Swetlana Herbrandt's request
