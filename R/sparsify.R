@@ -35,6 +35,7 @@
 ##'  sparse matrix with 1s indicating either NAs or Non NAs - whichever is more memory efficient. 
 ##'  Columns will be named like "color_NA" or "color_NotNA"
 ##' }
+#' @param returnMeta Should meta data about variables and levels be returned?
 #'
 #' @export
 #' @import data.table
@@ -57,7 +58,7 @@
 #' sparsify(dt[, list(realCol)], naCols="identify")
 #' sparsify(dt[, list(realCol)], naCols="efficient")
 
-sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
+sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none", returnMeta=FALSE){
   # Convert a data.table object to a sparse matrix (class "dgCMatrix")
   
   #--------------------------------------------------
@@ -172,6 +173,7 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   
   # Build sparse matrix from unordered factor features
   cols.ufactor <- cols[Type %in% c("unordered factor")]$Column
+  factor_levels = NULL
   if(length(cols.ufactor) > 0){
     factor_levels <- data.table(variable=character(0), level=character(0))
     for(col in cols.ufactor) factor_levels <- rbind(factor_levels, data.table(variable=col, level=levels(dt[[col]])))
@@ -214,5 +216,15 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   col.names <- col.names[order(ColumnIdx, -NACol, NewColumn)]
   sparse.all <- sparse.all[, col.names$NewColumn]
   
-  return(sparse.all)
+  # default: return only data.table 
+  result <- sparse.all
+  
+  # if meta data is required, return list with table and meta
+  if( returnMeta)
+    result = list(
+      table=sparse.all,
+      meta=factor_levels
+    )
+  
+  return(result)
 }
