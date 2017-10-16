@@ -1,4 +1,4 @@
 library(testthat)
-library(dplyr)
+library(mltools)
 
-test_check("mltool")
+test_check("mltools")

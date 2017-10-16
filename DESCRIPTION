@@ -15,3 +15,5 @@ Imports:
   Matrix,
   methods,
   stats
+Suggests:
+    testthat
