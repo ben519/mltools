@@ -1,4 +1,5 @@
 # mltools
+[![Travis-CI Build Status](https://travis-ci.org/ben519/mltools.svg?branch=master)](https://travis-ci.org/ben519/mltools)
 [![](https://cranlogs.r-pkg.org/badges/mltools)](https://CRAN.R-project.org/package=mltools)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/mltools)](https://CRAN.R-project.org/package=mltools)
 
