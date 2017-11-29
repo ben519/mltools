@@ -2,14 +2,15 @@
 #' Root Mean Square Error
 #'
 #' @description
-#' Calculate Root-mean-square error (deviation)
+#' Calculate Root-Mean-Square Error (Deviation)
 #'
 #' @details
-#' Calculate Root-mean-square error (deviation)
+#' Calculate Root-Mean-Square Error (Deviation)
 #' 
-#' @param preds A vector of prediction values in {1, 0}, or {TRUE, FALSE}
-#' @param actuals A vector of actuals values in {1, 0}, or {TRUE, FALSE}
-#' @param na.rm Should NA values be ignored?
+#' @param preds A vector of prediction values in [0, 1]
+#' @param actuals A vector of actuals values in {0, 1}, or {FALSE, TRUE}
+#' @param na.rm Should (prediction, actual) pairs with at least one NA value be ignored?
+#' @param weights Optional vectors of weights
 #'
 #' @references
 #' \url{https://en.wikipedia.org/wiki/Root-mean-square_deviation}
@@ -22,10 +23,13 @@
 #' @export
 #' @import data.table
 
-rmse <- function(preds=NULL, actuals=NULL, na.rm=FALSE){
-  # Root-mean-square error
+rmse <- function(preds=NULL, actuals=NULL, na.rm=FALSE, weights=1){
+  # root-mean-square error
   
-  result <- sqrt(mean((preds - actuals)^2, na.rm=na.rm))
+  if(length(weights) > 1 & length(weights) != length(preds))
+    stop("weights should be the same length as preds")
+  
+  result <- sqrt(mltools::mse(preds=preds, actuals=actuals, na.rm=na.rm, weights=weights))
   
   return(result)
 }

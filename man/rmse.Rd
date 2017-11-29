@@ -4,20 +4,22 @@
 \alias{rmse}
 \title{Root Mean Square Error}
 \usage{
-rmse(preds = NULL, actuals = NULL, na.rm = FALSE)
+rmse(preds = NULL, actuals = NULL, na.rm = FALSE, weights = 1)
 }
 \arguments{
-\item{preds}{A vector of prediction values in {1, 0}, or {TRUE, FALSE}}
+\item{preds}{A vector of prediction values in [0, 1]}
 
-\item{actuals}{A vector of actuals values in {1, 0}, or {TRUE, FALSE}}
+\item{actuals}{A vector of actuals values in {0, 1}, or {FALSE, TRUE}}
 
-\item{na.rm}{Should NA values be ignored?}
+\item{na.rm}{Should (prediction, actual) pairs with at least one NA value be ignored?}
+
+\item{weights}{Optional vectors of weights}
 }
 \description{
-Calculate Root-mean-square error (deviation)
+Calculate Root-Mean-Square Error (Deviation)
 }
 \details{
-Calculate Root-mean-square error (deviation)
+Calculate Root-Mean-Square Error (Deviation)
 }
 \examples{
 preds <- c(1.0, 2.0, 9.5)
