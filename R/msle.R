@@ -23,6 +23,15 @@
 msle <- function(preds=NULL, actuals=NULL, na.rm=FALSE, weights = 1){
   # mean-square-logarithmic error
   
+  #--------------------------------------------------
+  # Hack to pass 'no visible binding for global variable' notes from R CMD check
+  
+  Pred <- NULL
+  Actual <- NULL
+  Weight <- NULL
+  
+  #--------------------------------------------------
+  
   if(length(weights) > 1 & length(weights) != length(preds))
     stop("weights should be the same length as preds")
   
