@@ -42,7 +42,7 @@ mse <- function(preds=NULL, actuals=NULL, na.rm=FALSE, weights = 1){
     dt <- data.table::data.table(Pred = preds, Actual = actuals, Weight = weights)
     result <- dt[!(is.na(Pred) | is.na(Actual)), list(Score = sum(Weight * (Pred - Actual)^2)/sum(Weight))]$Score
   } else{
-    if(length(weights) == 1) weights <- rep(weights, length(preds))
+    if(length(weights) == 1) weights <- rep(weights, length(actuals))
     result <- weighted.mean((preds - actuals)^2, w = weights)
   }
   

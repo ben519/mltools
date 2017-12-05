@@ -39,7 +39,7 @@ msle <- function(preds=NULL, actuals=NULL, na.rm=FALSE, weights = 1){
     dt <- data.table::data.table(Pred = preds, Actual = actuals, Weight = weights)
     result <- dt[!(is.na(Pred) | is.na(Actual)), list(Score = sum(Weight * (log1p(Pred) - log1p(Actual))^2)/sum(Weight))]$Score
   } else{
-    if(length(weights) == 1) weights <- rep(weights, length(preds))
+    if(length(weights) == 1) weights <- rep(weights, length(actuals))
     result <- weighted.mean((log1p(preds) - log1p(actuals))^2, w = weights)
   }
   
