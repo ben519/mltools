@@ -16,7 +16,7 @@ explore_dataset(dt1, dt2 = NULL, targetCol = NULL, verbose = FALSE)
 \item{verbose}{Should the exploratory process steps be displayed?}
 }
 \description{
-(Expirimental) Automated Exploratory Data Analysis
+(Experimental) Automated Exploratory Data Analysis
 }
 \details{
 Expirimental. Evaluates and summarizes the data in every column of a data.table. 
