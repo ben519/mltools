@@ -45,7 +45,7 @@ auc_roc <- function(preds, actuals, returnDT=FALSE){
   #--------------------------------------------------
   
   # Check if every prediction is identical and if so, return 0.5
-  if(uniqueN(preds) == 1L) return(0.5)
+  if(length(unique(preds)) == 1L) return(0.5)
   
   # Convert actuals to numeric if it's an ordered factor
   if(is(actuals, "factor")){
