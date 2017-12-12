@@ -3,7 +3,9 @@
 #'
 #' @description
 #' Calculate Mean-Square Error (Deviation)
-#'
+#' 
+#' For the ith sample, Squared Error is calculated as SE = (prediction - actual)^2. MSE is then mean(squared errors).
+#' 
 #' @details
 #' Calculate Mean-Square Error (Deviation)
 #' 

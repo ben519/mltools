@@ -17,6 +17,9 @@ rmse(preds = NULL, actuals = NULL, na.rm = FALSE, weights = 1)
 }
 \description{
 Calculate Root-Mean-Square Error (Deviation)
+
+For the ith sample, Squared Error is calculated as SE = (prediction - actual)^2. 
+RMSE is then sqrt(mean(squared errors)).
 }
 \details{
 Calculate Root-Mean-Square Error (Deviation)

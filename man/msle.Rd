@@ -17,6 +17,10 @@ msle(preds = NULL, actuals = NULL, na.rm = FALSE, weights = 1)
 }
 \description{
 Calculate Mean-Square-Logarithmic Error (Deviation)
+
+For the ith sample, Squared Logarithmic Error is calculated as SLE = (log(prediction + 1) - log(actual + 1))^2. 
+MSE is then mean(squared logarithmic errors). Note the '+1' in the calculation of SLE which avoids taking the logarithm of 0
+for data which may include 0s.
 }
 \details{
 Calculate Mean-Square-Logarithmic Error (Deviation)
