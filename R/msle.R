@@ -27,8 +27,8 @@
 msle <- function(preds=NULL, actuals=NULL, na.rm=FALSE, weights = 1){
   # mean-square-logarithmic error
   
-  if(any(preds <= -1)) stop("Can't calculate msle because some preds <= -1")
-  if(any(actuals <= -1)) stop("Can't calculate msle because some actuals <= -1")
+  if(any(preds <= -1, na.rm = T)) stop("Can't calculate msle because some preds <= -1")
+  if(any(actuals <= -1, na.rm = T)) stop("Can't calculate msle because some actuals <= -1")
   
   #--------------------------------------------------
   # Hack to pass 'no visible binding for global variable' notes from R CMD check
