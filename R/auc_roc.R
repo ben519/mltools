@@ -45,7 +45,7 @@ auc_roc <- function(preds, actuals, returnDT=FALSE){
   #--------------------------------------------------
   
   # Check if every prediction is identical and if so, return 0.5
-  if(length(unique(preds)) == 1) return(0.5)
+  if(length(unique(preds)) == 1L) return(0.5)
   
   # Convert actuals to numeric if it's an ordered factor
   if(is(actuals, "factor")){
@@ -55,7 +55,10 @@ auc_roc <- function(preds, actuals, returnDT=FALSE){
   dt <- data.table(Pred=preds, Actual=actuals*1L)
   setorder(dt, -Pred)
 
-  dt <- dt[, list(CountFalse=sum(Actual==0), CountTrue=sum(Actual)), by=Pred]
+  dt <- dt[ , {
+      CountTrue = sum(Actual)
+      list(CountFalse=.N - CountTrue, CountTrue=CountTrue)
+    }, by=Pred]
 
   # Calculate the CumulativeFalsePositiveRate and CumulativeTruePositiveRate
   dt[, CumulativeFPR := cumsum(CountFalse)/sum(CountFalse)]
