@@ -12,8 +12,8 @@
 #' 
 #' @param preds A vector of prediction values in [0, 1]
 #' @param actuals A vector of actuals values in {0, 1}, or {FALSE, TRUE}
-#' @param na.rm Should (prediction, actual) pairs with at least one NA value be ignored?
 #' @param weights Optional vectors of weights
+#' @param na.rm Should (prediction, actual) pairs with at least one NA value be ignored?
 #'
 #' @references
 #' \url{https://en.wikipedia.org/wiki/Root-mean-square_deviation}
@@ -26,13 +26,19 @@
 #' @export
 #' @import data.table
 
-rmse <- function(preds=NULL, actuals=NULL, na.rm=FALSE, weights=1){
+rmse <- function(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE){
   # root-mean-square error
+  
+  if(is.logical(weights))
+    stop("weights given as logical but should be numeric")
+  
+  if(!is.logical(na.rm))
+    stop("na.rm should be logical")
   
   if(length(weights) > 1 & length(weights) != length(preds))
     stop("weights should be the same length as preds")
   
-  result <- sqrt(mltools::mse(preds=preds, actuals=actuals, na.rm=na.rm, weights=weights))
+  result <- sqrt(mltools::mse(preds=preds, actuals=actuals, weights=weights, na.rm=na.rm))
   
   return(result)
 }
