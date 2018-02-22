@@ -14,25 +14,31 @@
 #' @param naCols Should columns be generated to indicate the present of NAs? Will only apply to factor columns with at least one NA
 #' @param dropCols Should the resulting data.table exclude the original columns which are one-hot-encoded?
 #' @param dropUnusedLevels Should columns of all 0s be generated for unused factor levels?
+#' @param stringsAsFactors Should character columns be treated as factors and be one-hot encoded?
+#' @param dropPct One-hot encoded columns with less than \code{dropPct} percent of \code{1's} will be removed
 #'
 #' @examples
 #' library(data.table)
 #' 
 #' dt <- data.table(
 #'   ID = 1:4,
-#'   color = factor(c("red", NA, "blue", "blue"), levels=c("blue", "green", "red"))
+#'   color = factor(c("red", NA, "blue", "blue"), levels=c("blue", "green", "red")),
+#'   fruit = c("banana", "mango", NA, "mango")
 #' )
 #' 
 #' one_hot(dt)
+#' one_hot(dt, stringsAsFactors=TRUE)
 #' one_hot(dt, sparsifyNAs=TRUE)
 #' one_hot(dt, naCols=TRUE)
 #' one_hot(dt, dropCols=FALSE)
 #' one_hot(dt, dropUnusedLevels=TRUE)
+#' one_hot(dt, stringsAsFactors=TRUE, dropPct=0.4)
 #' 
 #' @export
 #' @import data.table
 
-one_hot <- function(dt, cols="auto", sparsifyNAs=FALSE, naCols=FALSE, dropCols=TRUE, dropUnusedLevels=FALSE){
+one_hot <- function(dt, cols="auto", sparsifyNAs=FALSE, naCols=FALSE, dropCols=TRUE, dropUnusedLevels=FALSE
+                    ,stringsAsFactors = FALSE, dropPct = NULL){
   # One-Hot-Encode unordered factors in a data.table
   # If cols = "auto", each unordered factor column in dt will be encoded. (Or specifcy a vector of column names to encode)
   # If dropCols=TRUE, the original factor columns are dropped
@@ -46,22 +52,41 @@ one_hot <- function(dt, cols="auto", sparsifyNAs=FALSE, naCols=FALSE, dropCols=T
   #--------------------------------------------------
   
   # Automatically get the unordered factor columns
-  if(cols[1] == "auto") cols <- colnames(dt)[which(sapply(dt, function(x) is.factor(x) & !is.ordered(x)))]
   
-  # If there are no columns to encode, return dt
-  if(length(cols) == 0) return(dt)
+  # Copy so we don't adjust the input data in place. We need to keep the original dataset untouched
+  # in the event that the user sets dropCols = FALSE.
+  d <- copy(dt)
+  
+  if(stringsAsFactors){
+    if(cols[1] == "auto") {
+      cols <- colnames(d)[which(sapply(d, function(x) (is.factor(x) & !is.ordered(x)) | is.character(x)))]
+    }
+    
+    charCols <- cols[sapply(d[ ,cols, with = F], class) == 'character']
+    # Ensure that the data has character columns, If so convert to factors.
+    if(length(charCols) > 0) d[ ,(charCols) := lapply(.SD, as.factor), .SDcols = charCols]
+    
+  } else {
+    if(cols[1] == "auto") cols <- colnames(d)[which(sapply(dt, function(x) is.factor(x) & !is.ordered(x)))]
+  }
+  
+  # If there are no columns to encode, return d
+  if(length(cols) == 0) return(d)
   
   # Build tempDT containing and ID column and 'cols' columns
-  tempDT <- dt[, cols, with=FALSE]
+  tempDT <- d[, cols, with=FALSE]
   tempDT[, OHEID := .I]
   for(col in cols) set(tempDT, j=col, value=factor(paste(col, tempDT[[col]], sep="_"), levels=paste(col, levels(tempDT[[col]]), sep="_")))
   
   # One-hot-encode
   melted <- melt(tempDT, id = 'OHEID', value.factor = T, na.rm=TRUE)
-  if(dropUnusedLevels == TRUE){
-    newCols <- dcast(melted, OHEID ~ value, drop = T, fun.aggregate = length)
-  } else{
-    newCols <- dcast(melted, OHEID ~ value, drop = F, fun.aggregate = length)
+  newCols <- dcast(melted, OHEID ~ value, drop = dropUnusedLevels, fun.aggregate = length)
+  
+  # Drop sparsely populated columns if desired. Note that if dropPct = NULL nothing will happen
+  if(!(is.null(dropPct))){
+    if(dropPct >= 1 | dropPct <= 0) stop('dropPct must be a value between 0 and 1 exclusive.', call. = FALSE)
+    smallCols <- names(newCols)[which(colSums(newCols) < dropPct * nrow(newCols))]
+    newCols[ ,(smallCols) := NULL]
   }
   
   # Fill in potentially missing rows
