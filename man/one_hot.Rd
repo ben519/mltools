@@ -5,7 +5,8 @@
 \title{One Hot Encode}
 \usage{
 one_hot(dt, cols = "auto", sparsifyNAs = FALSE, naCols = FALSE,
-  dropCols = TRUE, dropUnusedLevels = FALSE)
+  dropCols = TRUE, dropUnusedLevels = FALSE, stringsAsFactors = FALSE,
+  dropPct = NULL)
 }
 \arguments{
 \item{dt}{A data.table}
@@ -19,26 +20,34 @@ one_hot(dt, cols = "auto", sparsifyNAs = FALSE, naCols = FALSE,
 \item{dropCols}{Should the resulting data.table exclude the original columns which are one-hot-encoded?}
 
 \item{dropUnusedLevels}{Should columns of all 0s be generated for unused factor levels?}
+
+\item{stringsAsFactors}{Should character columns be treated as factors and be one-hot encoded?}
+
+\item{dropPct}{One-hot encoded columns with less than \code{dropPct} percent of \code{1}'s will be removed.}
 }
 \description{
-One-Hot-Encode unordered factor columns of a data.table
+One-Hot-Encode unordered factor and character columns of a data.table
 }
 \details{
-One-hot-encoding converts an unordered categorical vector (i.e. a factor) to multiple binarized vectors where each binary vector of
-1s and 0s indicates the presence of a class (i.e. level) of the of the original vector.
+One-hot-encoding converts an unordered categorical vector (i.e. a factor) and optionally character strings
+to multiple binarized vectors where each binary vector of 1s and 0s indicates the presence of a class (i.e. level) 
+of the of the original vector.
 }
 \examples{
 library(data.table)
 
 dt <- data.table(
   ID = 1:4,
-  color = factor(c("red", NA, "blue", "blue"), levels=c("blue", "green", "red"))
+  color = factor(c("red", NA, "blue", "blue"), levels=c("blue", "green", "red")),
+  fruit = c("banana", "mango", NA, "mango")
 )
 
 one_hot(dt)
+one_hot(dt, stringsAsFactors=TRUE)
 one_hot(dt, sparsifyNAs=TRUE)
 one_hot(dt, naCols=TRUE)
 one_hot(dt, dropCols=FALSE)
 one_hot(dt, dropUnusedLevels=TRUE)
+one_hot(dt, stringsAsFactors=TRUE, dropPct=0.4)
 
 }

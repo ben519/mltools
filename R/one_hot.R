@@ -2,11 +2,12 @@
 #' One Hot Encode
 #'
 #' @description
-#' One-Hot-Encode unordered factor columns of a data.table
+#' One-Hot-Encode unordered factor and character columns of a data.table
 #'
 #' @details
-#' One-hot-encoding converts an unordered categorical vector (i.e. a factor) to multiple binarized vectors where each binary vector of
-#' 1s and 0s indicates the presence of a class (i.e. level) of the of the original vector.
+#' One-hot-encoding converts an unordered categorical vector (i.e. a factor) and optionally character strings
+#' to multiple binarized vectors where each binary vector of 1s and 0s indicates the presence of a class (i.e. level) 
+#' of the of the original vector.
 #'
 #' @param dt A data.table
 #' @param cols Which column(s) should be one-hot-encoded? DEFAULT = "auto" encodes all unordered factor columns
@@ -15,7 +16,7 @@
 #' @param dropCols Should the resulting data.table exclude the original columns which are one-hot-encoded?
 #' @param dropUnusedLevels Should columns of all 0s be generated for unused factor levels?
 #' @param stringsAsFactors Should character columns be treated as factors and be one-hot encoded?
-#' @param dropPct One-hot encoded columns with less than \code{dropPct} percent of \code{1's} will be removed
+#' @param dropPct One-hot encoded columns with less than \code{dropPct} percent of \code{1}'s will be removed.
 #'
 #' @examples
 #' library(data.table)
