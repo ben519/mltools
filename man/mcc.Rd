@@ -4,7 +4,8 @@
 \alias{mcc}
 \title{Matthews correlation coefficient}
 \usage{
-mcc(preds = NULL, actuals = NULL, x = NULL, y = NULL)
+mcc(preds = NULL, actuals = NULL, x = NULL, y = NULL, TP = NULL,
+  FP = NULL, TN = NULL, FN = NULL)
 }
 \arguments{
 \item{preds}{A vector of predicted classes in \{0, 1, ...\}}
@@ -14,6 +15,14 @@ mcc(preds = NULL, actuals = NULL, x = NULL, y = NULL)
 \item{x}{Indicator matrix of predicted classes (rows are samples, columns are classes). \eqn{x_{ij} = 1} if sample i is predicted as class j, 0 otherwise.}
 
 \item{y}{Indicator matrix of actual classes (rows are samples, columns are classes). \eqn{y_{ij} = 1} if sample i is labelled as class j, 0 otherwise.}
+
+\item{TP}{Count of true positives (correctly predicted 1/TRUE)}
+
+\item{FP}{Count of false positives (predicted 1/TRUE, but actually 0/FALSE)}
+
+\item{TN}{Count of true negatives (correctly predicted 0/FALSE)}
+
+\item{FN}{Count of false negatives (predicted 0/FALSE, but actually 1/TRUE)}
 }
 \description{
 Calculate Matthews correlation coefficient, with support for the multi-class definition:
@@ -24,7 +33,8 @@ Calculate Matthews correlation coefficient. Either
 
 \itemize{
  \item{\code{preds} and \code{actuals} can be given, in which case \code{x} and \code{y} will be ignored} or
- \item{\code{x} and \code{y} can be given, leaving \code{preds} and \code{actuals} NULL}
+ \item{\code{x} and \code{y} can be given, leaving \code{preds} and \code{actuals} NULL} or
+\item{\code{TP}, \code{FP}, \code{TN}, and \code{FN}, leaving all other arguments NULL}
 }
 }
 \references{
