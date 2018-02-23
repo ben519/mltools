@@ -4,13 +4,17 @@
 \alias{mcc}
 \title{Matthews correlation coefficient}
 \usage{
-mcc(preds = NULL, actuals = NULL, TP = NULL, FP = NULL, TN = NULL,
-  FN = NULL)
+mcc(preds = NULL, actuals = NULL, x = NULL, y = NULL, TP = NULL,
+  FP = NULL, TN = NULL, FN = NULL)
 }
 \arguments{
-\item{preds}{A vector of prediction values in {1, 0}, or {TRUE, FALSE}}
+\item{preds}{A vector of predicted classes in \{0, 1, ...\}}
 
-\item{actuals}{A vector of actuals values in {1, 0}, or {TRUE, FALSE}}
+\item{actuals}{A vector of actual classes in \{0, 1, ...\}}
+
+\item{x}{Indicator matrix of predicted classes (rows are samples, columns are classes). \eqn{x_{ij} = 1} if sample i is predicted as class j, 0 otherwise.}
+
+\item{y}{Indicator matrix of actual classes (rows are samples, columns are classes). \eqn{y_{ij} = 1} if sample i is labelled as class j, 0 otherwise.}
 
 \item{TP}{Count of true positives (correctly predicted 1/TRUE)}
 
@@ -21,24 +25,19 @@ mcc(preds = NULL, actuals = NULL, TP = NULL, FP = NULL, TN = NULL,
 \item{FN}{Count of false negatives (predicted 0/FALSE, but actually 1/TRUE)}
 }
 \description{
-Calculate Matthews correlation coefficient
+Calculate Matthews correlation coefficient, with support for the multi-class definition:
+\deqn{MCC = \frac{cov(X,Y)}{\sqrt{cov(X,X)*cov(Y,Y)}}}{MCC = cov(X,Y) / sqrt(cov(X,X)*cov(Y,Y))}
 }
 \details{
 Calculate Matthews correlation coefficient. Either
 
 \itemize{
- \item{\code{preds} and \code{actuals} can be given, leaving \code{TP}, \code{FP}, \code{TN}, and \code{FN} NULL} or
- \item{\code{TP}, \code{FP}, \code{TN}, and \code{FN} can be given, leaving \code{preds} and \code{actuals} NULL}
+ \item{\code{preds} and \code{actuals} can be given, in which case \code{x} and \code{y} will be ignored} or
+ \item{\code{x} and \code{y} can be given, leaving \code{preds} and \code{actuals} NULL} or
+\item{\code{TP}, \code{FP}, \code{TN}, and \code{FN}, leaving all other arguments NULL}
 }
-}
-\examples{
-preds <- c(1,1,1,0,1,1,0,0)
-actuals <- c(1,1,1,1,0,0,0,0)
-mcc(preds, actuals)
-mcc(actuals, actuals)
-mcc(TP=3, FP=2, TN=2, FN=1)
-
 }
 \references{
-\url{https://en.wikipedia.org/wiki/Matthews_correlation_coefficient}
+\url{https://doi.org/10.1371/journal.pone.0041882}
+\url{https://doi.org/10.1016/j.compbiolchem.2004.09.006}
 }
