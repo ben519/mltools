@@ -5,12 +5,14 @@
 \title{Matthews correlation coefficient}
 \usage{
 mcc(preds = NULL, actuals = NULL, TP = NULL, FP = NULL, TN = NULL,
-  FN = NULL)
+  FN = NULL, confusionM = NULL)
 }
 \arguments{
-\item{preds}{A vector of prediction values in {1, 0}, or {TRUE, FALSE}}
+\item{preds}{A vector of prediction values, or a data.frame or matrix of TRUE/FALSE or 1/0 whose columns correspond to the 
+possible classes}
 
-\item{actuals}{A vector of actuals values in {1, 0}, or {TRUE, FALSE}}
+\item{actuals}{A vector of actuals values, or a data.frame or matrix of TRUE/FALSE or 1/0 whose columns correspond to the 
+possible classes}
 
 \item{TP}{Count of true positives (correctly predicted 1/TRUE)}
 
@@ -19,16 +21,19 @@ mcc(preds = NULL, actuals = NULL, TP = NULL, FP = NULL, TN = NULL,
 \item{TN}{Count of true negatives (correctly predicted 0/FALSE)}
 
 \item{FN}{Count of false negatives (predicted 0/FALSE, but actually 1/TRUE)}
+
+\item{confusionM}{Confusion matrix whose (i,j) element represents the number of samples with predicted class i and true class j}
 }
 \description{
 Calculate Matthews correlation coefficient
 }
 \details{
-Calculate Matthews correlation coefficient. Either
+Calculate Matthews correlation coefficient. Provide either
 
 \itemize{
- \item{\code{preds} and \code{actuals} can be given, leaving \code{TP}, \code{FP}, \code{TN}, and \code{FN} NULL} or
- \item{\code{TP}, \code{FP}, \code{TN}, and \code{FN} can be given, leaving \code{preds} and \code{actuals} NULL}
+ \item{\code{preds} and \code{actuals}} or
+ \item{\code{TP}, \code{FP}, \code{TN}, and \code{FN}}
+ \item{\code{confusionM}}
 }
 }
 \examples{
@@ -37,6 +42,25 @@ actuals <- c(1,1,1,1,0,0,0,0)
 mcc(preds, actuals)
 mcc(actuals, actuals)
 mcc(TP=3, FP=2, TN=2, FN=1)
+
+# Multiclass
+preds <- data.frame(
+  setosa = rnorm(n = 150), 
+  versicolor = rnorm(n = 150), 
+  virginica = rnorm(n = 150)
+)
+preds <- preds == apply(preds, 1, max)
+actuals <- data.frame(
+  setosa = rnorm(n = 150), 
+  versicolor = rnorm(n = 150), 
+  virginica = rnorm(n = 150)
+)
+actuals <- actuals == apply(actuals, 1, max)
+mcc(preds = preds, actuals = actuals)
+
+# Confusion matrix
+mcc(confusionM = matrix(c(0,3,3,3,0,3,3,3,0), nrow = 3))
+mcc(confusionM = matrix(c(1,0,0,0,1,0,0,0,1), nrow = 3))
 
 }
 \references{
