@@ -1,10 +1,11 @@
 # News
 
-## mltools 0.3.4.9000
+## mltools 0.3.5
 
 - Added and organize evaluation metrics, mean square error: mse(), mean square logarithmic error: msle(), root mean square error: rmse(), and root mean square logarithmic error: rmsle().  Each metric now includes an option to pass weights and ignore NA values.
 - Added unit tests
 - Support for multiclass mcc() and user may now provide a confusion matrix as input
+- Avoid calling utils::modifyList() on POSIXlt objects
 
 ## mltools 0.3.4
 

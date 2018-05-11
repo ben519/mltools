@@ -60,15 +60,18 @@ date_factor <- function(dateVec, type="yearmonth", minDate=min(dateVec, na.rm=TR
   # Helpers
   
   # Helper method to get first-of-month of given dates
-  first_of_month <- function(somedate, p=as.POSIXlt(somedate)){
+  first_of_month <- function(somedate, p = as.POSIXlt(somedate)) {
     # Returns the first day in this month
-    return(as.Date(utils::modifyList(p, list(mon=p$mon, mday=1))))
+    p$mday <- 1
+    as.Date(p)
   }
   
   # Helper method to get end-of-month of given dates
-  end_of_month <- function(somedate, p=as.POSIXlt(somedate)){
+  end_of_month <- function(somedate, p = as.POSIXlt(somedate)) {
     # Returns the last day in this month
-    return(as.Date(utils::modifyList(p, list(mon=p$mon + 1, mday=0))))
+    p$mon <- p$mon + 1
+    p$mday <- 0
+    as.Date(p)
   }
   
   #--------------------------------------------------
