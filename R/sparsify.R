@@ -212,7 +212,7 @@ sparsify <- function(dt, sparsifyNAs=FALSE, naCols="none"){
   col.names[seq_along(matcols.na), NACol := TRUE]
   col.names[cols, ColumnIdx := ColumnIdx, on=c("OldColumn"="Column")]
   col.names <- col.names[order(ColumnIdx, -NACol, NewColumn)]
-  sparse.all <- sparse.all[, col.names$NewColumn]
+  sparse.all <- sparse.all[, col.names$NewColumn, drop = FALSE]
   
   return(sparse.all)
 }

@@ -1,5 +1,9 @@
 # News
 
+## mltools 0.3.5.9000
+
+- Added `drop = FALSE` parameter where needed inside `sparsify()` to force inputted data.table with 1 row to be returned as a sparse matrix
+
 ## mltools 0.3.5
 
 - Added and organize evaluation metrics, mean square error: mse(), mean square logarithmic error: msle(), root mean square error: rmse(), and root mean square logarithmic error: rmsle().  Each metric now includes an option to pass weights and ignore NA values.
