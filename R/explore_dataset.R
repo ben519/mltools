@@ -5,7 +5,7 @@
 #' (Experimental) Automated Exploratory Data Analysis
 #'
 #' @details
-#' Expirimental. Evaluates and summarizes the data in every column of a data.table. 
+#' Experimental. Evaluates and summarizes the data in every column of a data.table. 
 #' Can identify columns with hierarchical structure and columns with perfectly correlated 
 #' values.
 #' 

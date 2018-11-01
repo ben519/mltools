@@ -2,7 +2,7 @@
 #' Set Factor
 #'
 #' @description
-#' Convience method for dealing with factors. Map a list of vectors to a list of factor vectors (1-1 mapping) such that
+#' Convenience method for dealing with factors. Map a list of vectors to a list of factor vectors (1-1 mapping) such that
 #' the factor vectors all have the same levels - the unique values of the union of all the vectors in the list. Optionally
 #' group all low frequency values into a "_other_" level.
 #' 
