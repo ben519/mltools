@@ -9,7 +9,7 @@ License: MIT + file LICENSE
 URL: https://github.com/ben519/mltools
 BugReports: https://github.com/ben519/mltools/issues
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Imports:
   data.table(>= 1.9.7),
   Matrix,
