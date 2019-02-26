@@ -1,6 +1,6 @@
 context("sparisfy")
 
-test_that(desc = "sparsify correclty sparisfies data", code = {
+test_that(desc = "sparsify correctly sparisfies data", code = {
   
   # Example inputs
   dt1 <- data.table(
@@ -18,6 +18,12 @@ test_that(desc = "sparsify correclty sparisfies data", code = {
   result3 <- sparsify(dt1[, list(realCol)], naCols = "identify")
   result4 <- sparsify(dt1[, list(realCol)], naCols = "efficient")
   result5 <- sparsify(dt2, sparsifyNAs = FALSE)
+  
+  resultME1 <- sparsify(dt1)
+  resultME2 <- sparsify(dt1, sparsifyNAs=TRUE, memEfficient = TRUE)
+  resultME3 <- sparsify(dt1[, list(realCol)], naCols = "identify", memEfficient = TRUE)
+  resultME4 <- sparsify(dt1[, list(realCol)], naCols = "efficient", memEfficient = TRUE)
+  resultME5 <- sparsify(dt2, sparsifyNAs = FALSE, memEfficient = TRUE)
   
   # Expected outputs
   expected1 <- new(
@@ -70,4 +76,9 @@ test_that(desc = "sparsify correclty sparisfies data", code = {
   expect_equal(result3, expected3)
   expect_equal(result4, expected4)
   expect_equal(result5, expected5)
+  expect_equal(resultME1, expected1)
+  expect_equal(resultME2, expected2)
+  expect_equal(resultME3, expected3)
+  expect_equal(resultME4, expected4)
+  expect_equal(resultME5, expected5)
 })

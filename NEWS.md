@@ -4,6 +4,7 @@
 
 - Added `drop = FALSE` parameter where needed inside `sparsify()` to force inputted data.table with 1 row to be returned as a sparse matrix
 - Fixed bug where `sparsify(dt, sparsifyNAs = FALSE)` would error if dt had a factor column of all NAs (sometimes)
+- Added parameters `sparsifyCols` and `memEfficient` to `sparsify()`. `sparsifyCols` let's the user choose a subset of the inputted table's columns to be sparsified and `memEfficient = TRUE` will run a new, memory efficient version of sparsify().
 
 ## mltools 0.3.5
 

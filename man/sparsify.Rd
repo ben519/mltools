@@ -4,7 +4,8 @@
 \alias{sparsify}
 \title{Sparsify}
 \usage{
-sparsify(dt, sparsifyNAs = FALSE, naCols = "none")
+sparsify(dt, sparsifyNAs = FALSE, naCols = "none",
+  sparsifyCols = NULL, memEfficient = FALSE)
 }
 \arguments{
 \item{dt}{A data.table object}
@@ -19,6 +20,12 @@ sparsify(dt, sparsifyNAs = FALSE, naCols = "none")
  sparse matrix with 1s indicating either NAs or Non NAs - whichever is more memory efficient. 
  Columns will be named like "color_NA" or "color_NotNA"
 }}
+
+\item{sparsifyCols}{What columns to use. Use this to exclude columns of dt from being sparisfied without having 
+to build a column-subsetted copy of dt to input into sparsify(...). Default = NULL means use
+all columns of dt.}
+
+\item{memEfficient}{Default = FALSE. Set this to TRUE for a slower but more memory efficient process}
 }
 \description{
 Convert a data.table object into a sparse matrix (with the same number of rows).

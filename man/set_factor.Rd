@@ -12,7 +12,7 @@ set_factor(vectorList, aggregationThreshold = 0)
 \item{aggregationThreshold}{Values which appear this many times or less will be grouped into the level "_other_"}
 }
 \description{
-Convience method for dealing with factors. Map a list of vectors to a list of factor vectors (1-1 mapping) such that
+Convenience method for dealing with factors. Map a list of vectors to a list of factor vectors (1-1 mapping) such that
 the factor vectors all have the same levels - the unique values of the union of all the vectors in the list. Optionally
 group all low frequency values into a "_other_" level.
 }
