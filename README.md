@@ -226,3 +226,7 @@ cvtest[order(ROCScore)]
 
 ## Contact
 If you'd like to contact me regarding bugs, questions, or general consulting, feel free to drop me a line - bgorman519@gmail.com
+
+## Support
+Found this package helpful? Show your support and [buy some merch](https://shop.gormanalysis.com/)!
+[![GormAnalysis Shop](https://www.gormanalysis.com/ads/gormanalysis-shop.jpg)](https://shop.gormanalysis.com/)
