@@ -4,7 +4,8 @@
 \alias{msle}
 \title{Mean Square Logarithmic Error}
 \usage{
-msle(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE)
+msle(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE,
+  alpha = 1)
 }
 \arguments{
 \item{preds}{A vector of prediction values in [0, 1]}
@@ -14,13 +15,15 @@ msle(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE)
 \item{weights}{Optional vectors of weights}
 
 \item{na.rm}{Should (prediction, actual) pairs with at least one NA value be ignored?}
+
+\item{alpha}{(defualt = 1) See the formula details. Primary purpose is to prevent taking log(0)}
 }
 \description{
 Calculate Mean-Square-Logarithmic Error (Deviation)
 
-For the ith sample, Squared Logarithmic Error is calculated as SLE = (log(prediction + 1) - log(actual + 1))^2. 
-MSE is then mean(squared logarithmic errors). Note the '+1' in the calculation of SLE which avoids taking the logarithm of 0
-for data which may include 0s.
+For the ith sample, Squared Logarithmic Error is calculated as SLE = (log(prediction + alpha) - log(actual +
+alpha))^2. MSE is then mean(squared logarithmic errors). alpha (1 by default) can be used to prevent taking log(0)
+for data that contains non positive values
 }
 \details{
 Calculate Mean-Square-Logarithmic Error (Deviation)
