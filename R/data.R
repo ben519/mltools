@@ -13,8 +13,6 @@
 #' }
 #' 
 #' @details 
-#' library(data.table)
-#' 
 #' alien.train <- data.table::data.table(
 #'   SkinColor=c("green", "white", "brown", "white", "blue", "white", "green", "white"),
 #'   IQScore=c(300, 95, 105, 250, 115, 85, 130, 115),
@@ -23,8 +21,7 @@
 #'   Cat3=c("type4", "type4", "type11", "type2", "type11", "type2", "type4", "type4"),
 #'   IsAlien=c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, FALSE)
 #' )
-#' 
-#' save(alien.train, file="data/alien_train.rda")
+#' # usethis::use_data(alien.train, overwrite = TRUE)
 #' 
 "alien.train"
 
@@ -43,8 +40,6 @@
 #' }
 #' 
 #' @details 
-#' library(data.table)
-#' 
 #' alien.test <- data.table::data.table(
 #'   SkinColor=c("white", "green", "brown", "white", "red"),
 #'   IQScore=c(79, 100, 125, 90, 115),
@@ -52,7 +47,6 @@
 #'   Cat2=c("type5", "type5", "type9", "type8", "type2"),
 #'   Cat3=c("type2", "type2", "type7", "type4", "type4")
 #' )
-#' 
-#' save(alien.test, file="data/alien_test.rda")
+#' # usethis::use_data(alien.test, overwrite = TRUE)
 #' 
 "alien.test"

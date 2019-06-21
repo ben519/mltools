@@ -52,11 +52,11 @@ msle <- function(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE, alpha
   if(na.rm == TRUE){
     dt <- data.table::data.table(Pred = preds, Actual = actuals, Weight = weights)
     result <- dt[!(is.na(Pred) | is.na(Actual) | is.na(Weight)), list(
-      Score = sum(Weight * (log1p(Pred + alpha) - log1p(Actual + alpha))^2)/sum(Weight)
+      Score = sum(Weight * (log(Pred + alpha) - log(Actual + alpha))^2)/sum(Weight)
     )]$Score
   } else{
     if(length(weights) == 1) weights <- rep(weights, length(actuals))
-    result <- weighted.mean((log1p(preds + alpha) - log1p(actuals + alpha))^2, w = weights)
+    result <- weighted.mean((log(preds + alpha) - log(actuals + alpha))^2, w = weights)
   }
   
   return(result)
