@@ -11,6 +11,7 @@ BugReports: https://github.com/ben519/mltools/issues
 LazyData: TRUE
 RoxygenNote: 6.1.1
 Encoding: UTF-8
+Depends: R (>= 2.10)
 Imports:
   data.table(>= 1.9.7),
   Matrix,
