@@ -149,8 +149,14 @@ bin_data <- function(x = NULL, binCol = NULL, bins = 10, binType = "explicit", b
       roundbins <- as.integer(roundbins)
       if(roundbins < 0) stop("roundbins should be non-negative")
       numbins <- length(LBs)  # store the number of bins before rounding
-      LBs <- round(LBs, roundbins)
-      RBs <- round(RBs, roundbins)
+      LBs <- c(
+        floor(LBs[1L]) + floor((LBs[1L] - floor(LBs[1L])) * 10^roundbins)/10^roundbins, 
+        round(tail(LBs, -1), roundbins)
+        )
+      RBs <- c(
+        round(head(RBs, -1), roundbins),
+        floor(tail(RBs, 1)) + ceiling((tail(RBs, 1) - floor(tail(RBs, 1))) * 10^roundbins)/10^roundbins
+      )
       if(length(unique(LBs)) != numbins){
         stop(paste0("roundbins = ", roundbins, " makes some bins indistinguishable. Try increasing this value"))
       }
@@ -195,13 +201,6 @@ bin_data <- function(x = NULL, binCol = NULL, bins = 10, binType = "explicit", b
     binData[head(binDT, 1), on = list(BinCol >= LB, BinCol <= RB), Bin := i.Bin]
   } else if(boundaryType == "(lorc"){
     binData[binDT, on = list(BinCol > LB, BinCol <= RB), Bin := Bin]
-  }
-  
-  # Check for unbinned data
-  if(is.numeric(roundbins)){
-    if(nrow(binData[!is.na(BinCol) & is.na(Bin)]) > 0){
-      warning("Some values are missing bins because roundbins is too small. Increase roundbins to prevent this.")
-    }
   }
 
   #--------------------------------------------------
