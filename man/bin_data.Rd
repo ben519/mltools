@@ -5,7 +5,7 @@
 \title{Map a vector of numeric values into bins}
 \usage{
 bin_data(x = NULL, binCol = NULL, bins = 10, binType = "explicit",
-  boundaryType = "lcro]", returnDT = FALSE)
+  boundaryType = "lcro]", returnDT = FALSE, roundbins = FALSE)
 }
 \arguments{
 \item{x}{A vector of values or a data.table object}
@@ -32,6 +32,13 @@ bin_data(x = NULL, binCol = NULL, bins = 10, binType = "explicit",
 
 \item{returnDT}{If \bold{FALSE}, return an ordered factor of bins corresponding to the values given, else return
 a data.table object which includes all bins and values (makes a copy of data.table object if given)}
+
+\item{roundbins}{Should bin values be rounded? (Only applicable for binType = "quantile")
+\itemize{
+ \item{\bold{FALSE}} {bin values are not rounded}
+ \item{\bold{TRUE}} {NOT YET IMPLEMENTED. bin values are rounded to the lowest decimal such that data-to-bin mapping is not altered}
+ \item{\bold{non-negative integer}} {bin values are rounded to this many decimal places}
+}}
 }
 \description{
 Takes a vector of values and bin parameters and maps each value to an ordered factor whose levels are a set of bins like [0,1), [1,2), [2,3).

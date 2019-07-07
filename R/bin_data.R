@@ -40,6 +40,13 @@
 #'
 #' @param returnDT If \bold{FALSE}, return an ordered factor of bins corresponding to the values given, else return
 #' a data.table object which includes all bins and values (makes a copy of data.table object if given)
+#' 
+#' @param roundbins Should bin values be rounded? (Only applicable for binType = "quantile")
+#' \itemize{
+##'  \item{\bold{FALSE}} {bin values are not rounded}
+##'  \item{\bold{TRUE}} {NOT YET IMPLEMENTED. bin values are rounded to the lowest decimal such that data-to-bin mapping is not altered}
+##'  \item{\bold{non-negative integer}} {bin values are rounded to this many decimal places}
+##' }
 #'
 #' @examples
 #' library(data.table)
@@ -61,7 +68,8 @@
 #' @import data.table
 #' @importFrom stats quantile
 
-bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryType="lcro]", returnDT=FALSE){
+bin_data <- function(x = NULL, binCol = NULL, bins = 10, binType = "explicit", boundaryType = "lcro]", 
+                     returnDT = FALSE, roundbins = FALSE){
   # Bin a vector of values
 
   # Two call formats:
@@ -72,6 +80,10 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   #  where last open boundary is closed ']' or open ')' or similarly the first open boundary can be closed '[' or open '('.)
   # If returnDT is FALSE, a return an ordered factor values [LB, RB) corresponding to each element of dt,
   #  else return dt with an added Bin column and potential extra rows (i.e. empty bins)
+  # roundbins can be 
+  #  - FALSE: bins will not be rounded
+  #  - TRUE: bins will be rounded to the lowest decimal place without incorrectly binning the data
+  #  - non-negative integer: bins will be rounded to this many decimal places
   
   #--------------------------------------------------
   # Hack to pass 'no visible binding for global variable' notes from R CMD check
@@ -86,15 +98,15 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   
   if(is(x, "data.table") & is.null(binCol)) stop("binCol must be given")
   if(!is(x, "data.table") & !is.null(binCol)) stop("You specified binCol but didn't provided a data.table object for x")
-  
-  if(!binType %in% c("explicit", "quantile"))
-    stop("binType must be one of {'explicit', 'quantile'}")
-  
-  if(!boundaryType %in% c("lcro]", "lcro)", "[lorc", "(lorc"))
+  if(!binType %in% c("explicit", "quantile")) stop("binType must be one of {'explicit', 'quantile'}")
+  if(!boundaryType %in% c("lcro]", "lcro)", "[lorc", "(lorc")){
     stop('boundaryType must be one of {"lcro]", "lcro)", "[lorc", "(lorc"}')
-
-  #--------------------------------------------------
-  # Build binDT
+  }
+  if(binType == "explicit" && (roundbins == TRUE | is.numeric(roundbins))){
+    warning("roundbins = TRUE will be ignored since binType = 'explicit'")
+  }
+  
+  #--- Build binDT --------------------------------------
 
   if(is(x, "data.table")) vals <- as.numeric(x[[binCol]]) else vals <- as.numeric(x)
 
@@ -103,7 +115,7 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
     if(is(bins, "data.frame")){
       LBs <- bins[[1]]
       RBs <- bins[[2]]
-    }else if(length(bins) == 1){
+    } else if(length(bins) == 1){
       binVals <- seq(min(vals), max(vals), length.out=bins+1)
       LBs <- head(binVals, -1)
       RBs <- tail(binVals, -1)
@@ -114,53 +126,82 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   }
   if(binType == "quantile"){
     if(is(bins, "data.frame")){
-      LBs <- quantile(vals, probs=bins[[1]], na.rm=TRUE)
-      RBs <- quantile(vals, probs=bins[[2]], na.rm=TRUE)
+      LBs <- quantile(vals, probs = bins[[1]], na.rm=TRUE)
+      RBs <- quantile(vals, probs = bins[[2]], na.rm=TRUE)
     }else if(length(bins) == 1){
-      binVals <- unique(quantile(vals, probs=seq(0, 1, length.out=bins+1), na.rm=TRUE))
+      binVals <- unique(quantile(vals, probs = seq(0, 1, length.out = bins+1), na.rm = TRUE))
       LBs <- head(binVals, -1)
       RBs <- tail(binVals, -1)
-    } else{
-      LBs <- head(unique(quantile(vals, probs=bins, na.rm=TRUE)), -1)
-      RBs <- tail(unique(quantile(vals, probs=bins, na.rm=TRUE)), -1)
+    } else {
+      LBs <- head(unique(quantile(vals, probs = bins, na.rm = TRUE)), -1)
+      RBs <- tail(unique(quantile(vals, probs = bins, na.rm = TRUE)), -1)
+    }
+    
+    if(is.logical(roundbins) && roundbins == TRUE){
+      # Round the bins to the lowest possible decimal place without messing up the data map
+      # For each split point, get the nearest data on each side of the bin
+      # Iteratively round the split points to the nearest 20th, 19th, 18th, ... decimal
+      # stop once the mapping generates a mapping error
+      
+      stop("roundbins = TRUE not yet implemented")
+      
+    } else if(is.numeric(roundbins)){
+      roundbins <- as.integer(roundbins)
+      if(roundbins < 0) stop("roundbins should be non-negative")
+      numbins <- length(LBs)  # store the number of bins before rounding
+      LBs <- round(LBs, roundbins)
+      RBs <- round(RBs, roundbins)
+      if(length(unique(LBs)) != numbins){
+        stop(paste0("roundbins = ", roundbins, " makes some bins indistinguishable. Try increasing this value"))
+      }
+      if(length(unique(LBs)) != numbins){
+        stop(paste0("roundbins = ", roundbins, " makes some bins indistinguishable. Try increasing this value"))
+      }
     }
   }
 
   # Build binDT
-  binDT <- data.table(LB=LBs, RB=RBs)[order(LB, RB)]
+  binDT <- data.table(LB = LBs, RB = RBs)[order(LB, RB)]
 
   # Set the Bin column
   if(boundaryType == "lcro]"){
     binDT[, Bin := paste0("[", LB, ", ", RB, ")")]
     binDT[nrow(binDT), Bin := paste0("[", LB, ", ", RB, "]")]
-    binDT[, Bin := factor(Bin, levels=Bin, ordered=TRUE)]
+    binDT[, Bin := factor(Bin, levels = Bin, ordered = TRUE)]
   } else if(boundaryType == "lcro)"){
     binDT[, Bin := paste0("[", LB, ", ", RB, ")")]
-    binDT[, Bin := factor(Bin, levels=Bin, ordered=TRUE)]
+    binDT[, Bin := factor(Bin, levels = Bin, ordered = TRUE)]
   } else if(boundaryType == "[lorc"){
     binDT[, Bin := paste0("(", LB, ", ", RB, "]")]
     binDT[1, Bin := paste0("[", LB, ", ", RB, "]")]
-    binDT[, Bin := factor(Bin, levels=Bin, ordered=TRUE)]
+    binDT[, Bin := factor(Bin, levels = Bin, ordered = TRUE)]
   } else if(boundaryType == "(lorc"){
     binDT[, Bin := paste0("(", LB, ", ", RB, "]")]
-    binDT[, Bin := factor(Bin, levels=Bin, ordered=TRUE)]
+    binDT[, Bin := factor(Bin, levels = Bin, ordered = TRUE)]
   }
 
   #--------------------------------------------------
   # Determine the Bin for each row in dt
 
-  binData <- data.table(BinCol=vals)
+  binData <- data.table(BinCol = vals)
 
   if(boundaryType == "lcro]"){
-    binData[binDT, on=list(BinCol >= LB, BinCol < RB), Bin := Bin]
-    binData[tail(binDT, 1), on=list(BinCol >= LB, BinCol <= RB), Bin := i.Bin]
+    binData[binDT, on = list(BinCol >= LB, BinCol < RB), Bin := Bin]
+    binData[tail(binDT, 1), on = list(BinCol >= LB, BinCol <= RB), Bin := i.Bin]
   } else if(boundaryType == "lcro)"){
-    binData[binDT, on=list(BinCol >= LB, BinCol < RB), Bin := Bin]
+    binData[binDT, on = list(BinCol >= LB, BinCol < RB), Bin := Bin]
   } else if(boundaryType == "[lorc"){
-    binData[binDT, on=list(BinCol > LB, BinCol <= RB), Bin := Bin]
-    binData[head(binDT, 1), on=list(BinCol >= LB, BinCol <= RB), Bin := i.Bin]
+    binData[binDT, on = list(BinCol > LB, BinCol <= RB), Bin := Bin]
+    binData[head(binDT, 1), on = list(BinCol >= LB, BinCol <= RB), Bin := i.Bin]
   } else if(boundaryType == "(lorc"){
-    binData[binDT, on=list(BinCol > LB, BinCol <= RB), Bin := Bin]
+    binData[binDT, on = list(BinCol > LB, BinCol <= RB), Bin := Bin]
+  }
+  
+  # Check for unbinned data
+  if(is.numeric(roundbins)){
+    if(nrow(binData[!is.na(BinCol) & is.na(Bin)]) > 0){
+      warning("Some values are missing bins because roundbins is too small. Increase roundbins to prevent this.")
+    }
   }
 
   #--------------------------------------------------
@@ -173,7 +214,7 @@ bin_data <- function(x=NULL, binCol=NULL, bins=10, binType="explicit", boundaryT
   } else{
     # Else return a data.table object with all bin values and potentially extra rows (empty bins)
 
-    baseDT <- data.table(BinVal=vals)
+    baseDT <- data.table(BinVal = vals)
     baseDT[, Bin := binData$Bin]  # set the bins
     binnedData <- merge(binDT[, list(Bin)], baseDT, all=TRUE)  # full outer join with binDT
 
