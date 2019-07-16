@@ -186,7 +186,7 @@ bin_data <- function(x = NULL, binCol = NULL, bins = 10, binType = "explicit", b
     binDT[, Bin := factor(Bin, levels = Bin, ordered = TRUE)]
   }else if(boundaryType == "borders_to_text"){
     binDT[, Bin := paste0(LB, "to", RB)]
-    binDT[nrow(binDT), Bin := paste0(LB, "to", RB)]
+    binDT[nrow(binDT), Bin := paste0(LB, "_to_", RB)]
     binDT[, Bin := factor(Bin, levels = Bin, ordered = TRUE)]
   } 
 
