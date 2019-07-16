@@ -184,7 +184,11 @@ bin_data <- function(x = NULL, binCol = NULL, bins = 10, binType = "explicit", b
   } else if(boundaryType == "(lorc"){
     binDT[, Bin := paste0("(", LB, ", ", RB, "]")]
     binDT[, Bin := factor(Bin, levels = Bin, ordered = TRUE)]
-  }
+  }else if(boundaryType == "borders_to_text"){
+    binDT[, Bin := paste0(LB, "to", RB)]
+    binDT[nrow(binDT), Bin := paste0(LB, "to", RB)]
+    binDT[, Bin := factor(Bin, levels = Bin, ordered = TRUE)]
+  } 
 
   #--------------------------------------------------
   # Determine the Bin for each row in dt
@@ -200,6 +204,8 @@ bin_data <- function(x = NULL, binCol = NULL, bins = 10, binType = "explicit", b
     binData[binDT, on = list(BinCol > LB, BinCol <= RB), Bin := Bin]
     binData[head(binDT, 1), on = list(BinCol >= LB, BinCol <= RB), Bin := i.Bin]
   } else if(boundaryType == "(lorc"){
+    binData[binDT, on = list(BinCol > LB, BinCol <= RB), Bin := Bin]
+  }else if(boundaryType == "borders_to_text"){
     binData[binDT, on = list(BinCol > LB, BinCol <= RB), Bin := Bin]
   }
 
