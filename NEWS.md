@@ -1,6 +1,6 @@
 # News
 
-## mltools 0.3.5.9000
+## mltools 0.3.6
 
 - Added `drop = FALSE` parameter where needed inside `sparsify()` to force inputted data.table with 1 row to be returned as a sparse matrix
 - Fixed bug where `sparsify(dt, sparsifyNAs = FALSE)` would error if dt had a factor column of all NAs (sometimes)
