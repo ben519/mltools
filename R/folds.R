@@ -20,10 +20,10 @@
 #' @examples
 #' library(data.table)
 #' folds(8, nfolds=2)
-#' folds(alien.train$IsAlien, nfolds=2)
-#' folds(alien.train$IsAlien, nfolds=2, stratified=TRUE, seed=2016)
-#' folds(alien.train$IQScore, nfolds=2, stratified=TRUE, seed=2016)
-#' folds(alien.train, nfolds=2, stratified="IsAlien", seed=2016)
+#' folds(alientrain$IsAlien, nfolds=2)
+#' folds(alientrain$IsAlien, nfolds=2, stratified=TRUE, seed=2016)
+#' folds(alientrain$IQScore, nfolds=2, stratified=TRUE, seed=2016)
+#' folds(alientrain, nfolds=2, stratified="IsAlien", seed=2016)
 #'
 #' @export
 #' @import data.table

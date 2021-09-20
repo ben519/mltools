@@ -6,3 +6,4 @@
 *.DS_Store
 make_data.R
 .Rproj.user
+*.icloud

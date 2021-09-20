@@ -4,8 +4,13 @@
 \alias{sparsify}
 \title{Sparsify}
 \usage{
-sparsify(dt, sparsifyNAs = FALSE, naCols = "none",
-  sparsifyCols = NULL, memEfficient = FALSE)
+sparsify(
+  dt,
+  sparsifyNAs = FALSE,
+  naCols = "none",
+  sparsifyCols = NULL,
+  memEfficient = FALSE
+)
 }
 \arguments{
 \item{dt}{A data.table object}

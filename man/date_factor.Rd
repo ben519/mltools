@@ -4,8 +4,12 @@
 \alias{date_factor}
 \title{Date Factor}
 \usage{
-date_factor(dateVec, type = "yearmonth", minDate = min(dateVec, na.rm =
-  TRUE), maxDate = max(dateVec, na.rm = TRUE))
+date_factor(
+  dateVec,
+  type = "yearmonth",
+  minDate = min(dateVec, na.rm = TRUE),
+  maxDate = max(dateVec, na.rm = TRUE)
+)
 }
 \arguments{
 \item{dateVec}{A vector of date values}

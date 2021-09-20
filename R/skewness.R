@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' library(data.table)
-#' skewness(alien.train)
+#' skewness(alientrain)
 
 skewness <- function(dt){
   # Display the skewness of each field

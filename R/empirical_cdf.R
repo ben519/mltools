@@ -94,7 +94,7 @@ empirical_cdf <- function(x, ubounds){
   
   # For each binning column, match each row of x to the nearest boundary above
   for(col in names(uboundsUniques)){
-    uboundDT <- data.table(uboundsUniques[[col]], uboundsUniques[[col]])
+    uboundDT <- unique(data.table(uboundsUniques[[col]], uboundsUniques[[col]]))
     setnames(uboundDT, c(col, paste0("Bound.", col)))
     binned <- uboundDT[binned, on=col, roll=-Inf, nomatch=0]
   }
@@ -107,14 +107,14 @@ empirical_cdf <- function(x, ubounds){
   uboundsUniques <- binned.uniques[uboundsUniques, on=names(ubounds)]
   uboundsUniques[is.na(N), N := 0]
   
-  # Counting (see http://stackoverflow.com/a/40583817/2146894)
-  if(length(ubounds) == 1){
+  # Counting (see https://stackoverflow.com/a/40583817/2146894)
+  if(ncol(ubounds) == 1){
     uboundsUniques[, N.cum := cumsum(N)]
   } else{
     fixedCols <- names(ubounds)[-1]
     uboundsUniques[, N.cum := cumsum(N), by=fixedCols]
     
-    for(i in seq_len(length(ubounds) - 1)){
+    for(i in seq_len(ncol(ubounds) - 1)){
       i = i + 1
       fixedCols <- names(ubounds)[-i]
       uboundsUniques[, N.cum := cumsum(N.cum), by=fixedCols]

@@ -17,8 +17,8 @@
 #'
 #' @examples
 #' library(data.table)
-#' gini_impurities(alien.train)
-#' gini_impurities(alien.train, wide=TRUE)
+#' gini_impurities(alientrain)
+#' gini_impurities(alientrain, wide=TRUE)
 
 gini_impurities <- function(dt, wide=FALSE, verbose=FALSE){
   # Returns pairs of categorical fields (cat1, cat2, GiniImpurity) where GiniImpurity is the weighted gini impurity of

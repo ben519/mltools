@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' library(data.table)
-#' explore_dataset(alien.train)
+#' explore_dataset(alientrain)
 
 explore_dataset <- function(dt1, dt2=NULL, targetCol=NULL, verbose=FALSE){
   # Analyze the given dataset(s)

@@ -17,5 +17,5 @@ Counts the frequency of each value in each column, then displays the results in 
 }
 \examples{
 library(data.table)
-skewness(alien.train)
+skewness(alientrain)
 }

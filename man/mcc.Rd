@@ -4,8 +4,15 @@
 \alias{mcc}
 \title{Matthews correlation coefficient}
 \usage{
-mcc(preds = NULL, actuals = NULL, TP = NULL, FP = NULL,
-  TN = NULL, FN = NULL, confusionM = NULL)
+mcc(
+  preds = NULL,
+  actuals = NULL,
+  TP = NULL,
+  FP = NULL,
+  TN = NULL,
+  FN = NULL,
+  confusionM = NULL
+)
 }
 \arguments{
 \item{preds}{A vector of prediction values, or a data.frame or matrix of TRUE/FALSE or 1/0 whose columns correspond to the 

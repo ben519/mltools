@@ -4,8 +4,7 @@
 \alias{rmsle}
 \title{Root Mean Square Logarithmic Error}
 \usage{
-rmsle(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE,
-  alpha = 1)
+rmsle(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE, alpha = 1)
 }
 \arguments{
 \item{preds}{A vector of prediction values in [0, 1]}

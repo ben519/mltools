@@ -13,7 +13,7 @@
 #' }
 #' 
 #' @details 
-#' alien.train <- data.table::data.table(
+#' alientrain <- data.table::data.table(
 #'   SkinColor=c("green", "white", "brown", "white", "blue", "white", "green", "white"),
 #'   IQScore=c(300, 95, 105, 250, 115, 85, 130, 115),
 #'   Cat1=c("type1", "type1", "type2", "type4", "type2", "type4", "type1", "type1"),
@@ -21,9 +21,9 @@
 #'   Cat3=c("type4", "type4", "type11", "type2", "type11", "type2", "type4", "type4"),
 #'   IsAlien=c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, FALSE)
 #' )
-#' # usethis::use_data(alien.train, overwrite = TRUE)
+#' # usethis::use_data(alientrain, overwrite = TRUE)
 #' 
-"alien.train"
+"alientrain"
 
 
 #' Alien test dataset
@@ -40,13 +40,13 @@
 #' }
 #' 
 #' @details 
-#' alien.test <- data.table::data.table(
+#' alientest <- data.table::data.table(
 #'   SkinColor=c("white", "green", "brown", "white", "red"),
 #'   IQScore=c(79, 100, 125, 90, 115),
 #'   Cat1=c("type4", "type4", "type3", "type1", "type1"),
 #'   Cat2=c("type5", "type5", "type9", "type8", "type2"),
 #'   Cat3=c("type2", "type2", "type7", "type4", "type4")
 #' )
-#' # usethis::use_data(alien.test, overwrite = TRUE)
+#' # usethis::use_data(alientest, overwrite = TRUE)
 #' 
-"alien.test"
+"alientest"

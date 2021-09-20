@@ -21,6 +21,6 @@ For pairs of columns (Var1, Var2) in a dataset, calculates the weighted gini imp
 }
 \examples{
 library(data.table)
-gini_impurities(alien.train)
-gini_impurities(alien.train, wide=TRUE)
+gini_impurities(alientrain)
+gini_impurities(alientrain, wide=TRUE)
 }
