@@ -35,7 +35,7 @@
 ##'  sparse matrix with 1s indicating either NAs or Non NAs - whichever is more memory efficient. 
 ##'  Columns will be named like "color_NA" or "color_NotNA"
 ##' }
-#' @param sparsifyCols What columns to use. Use this to exclude columns of dt from being sparisfied without having 
+#' @param sparsifyCols What columns to use. Use this to exclude columns of dt from being sparsified without having 
 #'                     to build a column-subsetted copy of dt to input into sparsify(...). Default = NULL means use
 #'                     all columns of dt.
 #' @param memEfficient Default = FALSE. Set this to TRUE for a slower but more memory efficient process

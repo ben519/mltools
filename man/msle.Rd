@@ -15,7 +15,7 @@ msle(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE, alpha = 1)
 
 \item{na.rm}{Should (prediction, actual) pairs with at least one NA value be ignored?}
 
-\item{alpha}{(defualt = 1) See the formula details. Primary purpose is to prevent taking log(0)}
+\item{alpha}{(default = 1) See the formula details. Primary purpose is to prevent taking log(0)}
 }
 \description{
 Calculate Mean-Square-Logarithmic Error (Deviation)

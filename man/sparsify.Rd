@@ -26,7 +26,7 @@ sparsify(
  Columns will be named like "color_NA" or "color_NotNA"
 }}
 
-\item{sparsifyCols}{What columns to use. Use this to exclude columns of dt from being sparisfied without having 
+\item{sparsifyCols}{What columns to use. Use this to exclude columns of dt from being sparsified without having 
 to build a column-subsetted copy of dt to input into sparsify(...). Default = NULL means use
 all columns of dt.}
 

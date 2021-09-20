@@ -15,7 +15,7 @@
 #' @param actuals A vector of actuals values in {0, 1}, or {FALSE, TRUE}
 #' @param weights Optional vectors of weights
 #' @param na.rm Should (prediction, actual) pairs with at least one NA value be ignored?
-#' @param alpha (defualt = 1) See the formula details. Primary purpose is to prevent taking log(0)
+#' @param alpha (default = 1) See the formula details. Primary purpose is to prevent taking log(0)
 #'
 #' @examples
 #' preds <- c(1.0, 2.0, 9.5)

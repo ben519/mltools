@@ -33,7 +33,7 @@
 
 ## mltools 0.3.1
 
-- Fixed bug in `bin_data()` occuring when `x` is integery type and `bins` includes `Inf` or `-Inf`
+- Fixed bug in `bin_data()` occurring when `x` is integer type and `bins` includes `Inf` or `-Inf`
 
 ## mltools 0.3.0
 
