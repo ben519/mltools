@@ -84,6 +84,9 @@ sparsify <- function(dt, sparsifyNAs = FALSE, naCols = "none", sparsifyCols = NU
   
   #--- Check Inputs --------------------------------------
   
+  if(!is.data.table(dt))
+    stop("dt must be a data.table object")
+  
   if(!naCols %in% c("none", "identify", "efficient")) 
     stop("Argument 'naCols' not recognized. Should be one of {\"none\", \"identify\", \"efficient\"}")
   
