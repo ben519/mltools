@@ -14,7 +14,7 @@
 #'           If \code{sparsifyNAs} = TRUE, 0s and NAs will be sparsified
 #'
 #' factor (unordered) | Each level will generate a sparsified binary column
-#'                      Column names are feature_level, e.g. {"color_red", "color_blue"}
+#'                      Column names are feature_level, e.g. \{"color_red", "color_blue"\}
 #'
 #' factor (ordered) | Levels are converted to numeric, 1 - NLevels
 #'                    If \code{sparsifyNAs} = FALSE, NAs will remain as NAs

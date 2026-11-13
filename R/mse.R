@@ -10,7 +10,7 @@
 #' Calculate Mean-Square Error (Deviation)
 #' 
 #' @param preds A vector of prediction values in [0, 1]
-#' @param actuals A vector of actuals values in {0, 1}, or {FALSE, TRUE}
+#' @param actuals A vector of actuals values in \{0, 1\}, or \{FALSE, TRUE\}
 #' @param weights Optional vectors of weights
 #' @param na.rm Should (prediction, actual) pairs with at least one NA value be ignored?
 #'

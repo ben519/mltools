@@ -18,34 +18,34 @@
 #' @param x A vector of values or a data.table object
 #' @param binCol A column of \code{dt} specifying the values to bin
 #' @param bins
-#' \itemize{
-##'  \item{\bold{integer}} {specifying the number of bins to generate}
-##'  \item{\bold{numeric vector}} {specifying sequential bin boundaries \{(x0, x1), (x1, x2), ..., (xn-1, xn)\}}
-##'  \item{\bold{2-column data.frame/data.table}} {each row defines a bin}
+#' \describe{
+##'  \item{\bold{integer}}{specifying the number of bins to generate}
+##'  \item{\bold{numeric vector}}{specifying sequential bin boundaries \{(x0, x1), (x1, x2), ..., (xn-1, xn)\}}
+##'  \item{\bold{2-column data.frame/data.table}}{each row defines a bin}
 ##' }
 #'
 #' @param binType
-#' \itemize{
-##'  \item{\bold{"explicit"}} {interpret bins as they are given}
-##'  \item{\bold{"quantile"}} {interpret bins as quantiles (empty quantile bins will be discarded)}
+#' \describe{
+##'  \item{\bold{"explicit"}}{interpret bins as they are given}
+##'  \item{\bold{"quantile"}}{interpret bins as quantiles (empty quantile bins will be discarded)}
 ##' }
 #'
 #' @param boundaryType
-#' \itemize{
-##'  \item{\bold{"lcro]"}} {bins are [left-closed, right-open) except for last bin which is [left-closed, right-closed]}
-##'  \item{\bold{"lcro)"}} {bins are [left-closed, right-open)}
-##'  \item{\bold{"[lorc"}} {bins are (left-open, right-closed] except for first bin which is [left-closed, right-closed]}
-##'  \item{\bold{"(lorc"}} {bins are (left-open, right-closed]}
+#' \describe{
+##'  \item{\bold{"lcro]"}}{bins are [left-closed, right-open) except for last bin which is [left-closed, right-closed]}
+##'  \item{\bold{"lcro)"}}{bins are [left-closed, right-open)}
+##'  \item{\bold{"[lorc"}}{bins are (left-open, right-closed] except for first bin which is [left-closed, right-closed]}
+##'  \item{\bold{"(lorc"}}{bins are (left-open, right-closed]}
 ##' }
 #'
 #' @param returnDT If \bold{FALSE}, return an ordered factor of bins corresponding to the values given, else return
 #' a data.table object which includes all bins and values (makes a copy of data.table object if given)
 #' 
 #' @param roundbins Should bin values be rounded? (Only applicable for binType = "quantile")
-#' \itemize{
-##'  \item{\bold{FALSE}} {bin values are not rounded}
-##'  \item{\bold{TRUE}} {NOT YET IMPLEMENTED. bin values are rounded to the lowest decimal such that data-to-bin mapping is not altered}
-##'  \item{\bold{non-negative integer}} {bin values are rounded to this many decimal places}
+#' \describe{
+##'  \item{\bold{FALSE}}{bin values are not rounded}
+##'  \item{\bold{TRUE}}{NOT YET IMPLEMENTED. bin values are rounded to the lowest decimal such that data-to-bin mapping is not altered}
+##'  \item{\bold{non-negative integer}}{bin values are rounded to this many decimal places}
 ##' }
 #'
 #' @examples
