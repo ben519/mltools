@@ -9,7 +9,7 @@ msle(preds = NULL, actuals = NULL, weights = 1, na.rm = FALSE, alpha = 1)
 \arguments{
 \item{preds}{A vector of prediction values in [0, 1]}
 
-\item{actuals}{A vector of actuals values in {0, 1}, or {FALSE, TRUE}}
+\item{actuals}{A vector of actuals values in \{0, 1\}, or \{FALSE, TRUE\}}
 
 \item{weights}{Optional vectors of weights}
 

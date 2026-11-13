@@ -14,7 +14,7 @@ date_factor(
 \arguments{
 \item{dateVec}{A vector of date values}
 
-\item{type}{One of {"year", "yearquarter", "yearmonth", "quarter", "month"}}
+\item{type}{One of \{"year", "yearquarter", "yearmonth", "quarter", "month"\}}
 
 \item{minDate}{(Default = min(dateVec)) When determining factor levels, use this date to set the min level, after coercing 
 dates to the specified \code{type}. For example, if dateVec = (2016-01-15, 2016-02-15), type = "yearmonth", and minDate = 2016-02-01,
@@ -23,7 +23,7 @@ the result will be (NA, Feb 2016).}
 \item{maxDate}{(Default = max(dateVec)) When determining factor levels, use this date to set the max level. (See minDate, above)}
 }
 \description{
-Map a vector of dates to a factor at one of these levels {"yearmonth", "yearquarter", "quarter", "month"}
+Map a vector of dates to a factor at one of these levels \{"yearmonth", "yearquarter", "quarter", "month"\}
 }
 \details{
 The resulting vector is an ordered factor of the specified \code{type} (e.g. yearmonth)
